@@ -6,13 +6,13 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/02/23 10:11:22 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/02/23 10:57:42 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SOURCES = $(addprefix srcs/, main.c)
+SOURCES = $(addprefix srcs/, main.c time.c ft_atoi.c)
 
 OBJECTS = $(SOURCES:.c=.o)
 
