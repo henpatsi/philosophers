@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:57:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/26 12:29:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/26 12:58:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	print_fork(t_philo philo)
 	ms = get_time_passed(philo.args->start_time);
 	if (ms == -1)
 		return (-1);
-	printf("%ld %d %s\n", ms, philo.num + 1, " has taken a fork");
+	printf("%ld %d %s\n", ms, philo.num + 1, "has taken a fork");
 	return (1);
 }
 
