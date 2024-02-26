@@ -6,11 +6,16 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 09:47:27 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/23 11:54:43 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/26 12:06:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void	free_args(t_args *args)
+{
+	free(args->forks);
+}
 
 int	prepare_args(t_args *args, int argc, char **argv)
 {
@@ -27,58 +32,23 @@ int	prepare_args(t_args *args, int argc, char **argv)
 		args->eat_count = ft_atoi(argv[5]);
 	else
 		args->eat_count = 0;
+	if (gettimeofday(&args->start_time, NULL) == -1)
+		return (-1);
+	if (initialize_forks(args) == -1)
+		return (-1);
 	return (1);
-}
-
-void	*counter(void *arg)
-{
-	t_philo			philo;
-	struct timeval	start_time;
-	long			ms;
-	long			last_ms;
-
-	philo = *(t_philo *) arg;
-	if (gettimeofday(&start_time, NULL) == -1)
-		return (0);
-	last_ms = 0;
-	while (1)
-	{
-		ms = get_time_passed(start_time);
-		if (ms - last_ms >= 1000)
-		{
-			printf("%d: %lu\n", philo.num, ms);
-			last_ms = ms;
-		}
-	}
 }
 
 int	main(int argc, char **argv)
 {
 	t_args	args;
-	
+	int		ret;
+
 	if (prepare_args(&args, argc, argv) == -1)
 		return (1);
-
-	t_philo		*philos;
-	pthread_t	*threads;
-	int			i;
-
-	philos = malloc(args.philo_count * sizeof(philos));
-	threads = malloc(args.philo_count * sizeof(pthread_t));
-	
-	i = 0;
-	while (i < args.philo_count)
-	{
-		philos[i].num = i;
-		philos[i].args = args;
-		pthread_create(&threads[i], NULL, &counter, &philos[i]);
-		i++;
-	}
-	
-	i = 0;
-	while (i < args.philo_count)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
+	ret = initialize_threads(&args);
+	free_args(&args);
+	if (ret == -1)
+		return (1);
+	return (0);
 }

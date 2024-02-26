@@ -6,19 +6,21 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/02/23 10:57:42 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/02/26 12:03:05 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SOURCES = $(addprefix srcs/, main.c time.c ft_atoi.c)
+SOURCES = $(addprefix srcs/, main.c init.c philo_start.c state.c ft_atoi.c)
 
 OBJECTS = $(SOURCES:.c=.o)
 
 INCLUDES = -I ./includes/
 
-CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g $(INCLUDES)
+DEBUG = -g -fsanitize=address
+
+CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES) $(DEBUG)
 
 all: $(NAME)
 
