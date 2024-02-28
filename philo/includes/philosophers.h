@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/26 14:53:34 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/28 08:57:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_args
 typedef struct s_philo
 {
 	int				num;
+	int				eat_count;
 	struct timeval	last_eat_time;
 	t_state			state;
 	t_args			*args;
@@ -53,11 +54,12 @@ void	*philo_start(void *arg);
 int		philo_eat(t_philo *philo);
 int		philo_sleep(t_philo *philo);
 int		philo_think(t_philo *philo);
+int		philo_die(t_philo *philo);
 
 int		put_down_forks(t_philo *philo);
 int		pick_up_forks(t_philo *philo);
 
-void	*monitor_start(void *arg);
+int		better_sleep(t_philo *philo, long sleep_time);
 
 long	get_time_passed(struct timeval start_time);
 int		print_fork(t_philo philo);

@@ -6,11 +6,25 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 12:00:21 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/26 12:48:05 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/28 09:29:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	destroy_forks(t_args *args)
+{
+	int	i;
+
+	i = 0;
+	while (i < args->philo_count)
+	{
+		pthread_mutex_destroy(&args->forks[i]);
+		i++;
+	}
+	free(args->forks);
+	return (1);
+}
 
 int	initialize_forks(t_args *args)
 {
@@ -41,6 +55,12 @@ int	initialize_philosophers(pthread_t *threads, t_args *args)
 	{
 		philos[i].num = i;
 		philos[i].args = args;
+		philos[i].eat_count = 0;
+		if (gettimeofday(&philos[i].last_eat_time, NULL) == -1)
+		{
+			free(philos);
+			return (-1);
+		}
 		pthread_create(&threads[i], NULL, &philo_start, &philos[i]);
 		i++;
 	}
@@ -51,7 +71,6 @@ int	initialize_philosophers(pthread_t *threads, t_args *args)
 int	initialize_threads(t_args *args)
 {
 	pthread_t	*threads;
-	void		*retval;
 	int			i;
 
 	threads = malloc(args->philo_count * sizeof(pthread_t));
@@ -65,11 +84,10 @@ int	initialize_threads(t_args *args)
 	i = 0;
 	while (i < args->philo_count)
 	{
-		pthread_join(threads[i], &retval);
-		if (retval != 0)
-			printf("%s\n", retval);
+		pthread_join(threads[i], NULL);
 		i++;
 	}
+	destroy_forks(args);
 	free(threads);
 	return (1);
 }
