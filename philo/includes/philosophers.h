@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/28 08:57:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/28 13:46:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_philo
 	t_args			*args;
 }	t_philo;
 
-int		initialize_forks(t_args *args);
 int		initialize_threads(t_args *args);
 
 void	*philo_start(void *arg);
