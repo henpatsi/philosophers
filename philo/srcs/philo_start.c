@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 09:15:23 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/28 09:10:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/28 10:48:31 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	philo_loop(t_philo philo)
 {
 	while (philo.args->eat_count == 0 || philo.eat_count < philo.args->eat_count)
 	{
-		pick_up_forks(&philo);
+		if (pick_up_forks(&philo) == -1)
+			break ;
 		if (philo_eat(&philo) == -1)
 			break ;
 		if (philo.eat_count == philo.args->eat_count)
