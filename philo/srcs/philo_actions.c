@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:48:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 11:13:44 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 12:49:56 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	philo_eat(t_thread_input input)
 {
 	input.philo->state = EAT;
 	print_state(input);
-	input.philo->eat_count++;
+	increment_philo_eat_count(input.philo, input.philo_mutex);
 	if (gettimeofday(&input.philo->last_eat_time, NULL) == -1)
 		return (-1);
 	if (better_sleep(input, input.args.eat_time) == -1)

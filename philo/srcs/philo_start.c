@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 09:15:23 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 11:21:46 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 12:47:03 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	philo_loop(t_thread_input input)
 {
-	while (input.args.eat_count == 0 || input.philo->eat_count < input.args.eat_count)
+	while (input.args.eat_count == 0 || get_philo_eat_count(input.philo, input.philo_mutex) < input.args.eat_count)
 	{
 		if (pick_up_forks(input) == -1)
 			break ;

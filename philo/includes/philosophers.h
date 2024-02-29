@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 11:13:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 12:46:36 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,17 @@ int		philo_think(t_thread_input input);
 
 int		put_down_forks(t_thread_input input);
 int		pick_up_forks(t_thread_input input);
+
+
+
+int				get_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex);
+struct timeval	get_philo_eat_time(t_philo *philo, pthread_mutex_t *philo_mutex);
+t_state			get_philo_state(t_philo *philo, pthread_mutex_t *philo_mutex);
+
+int				increment_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex);
+int				set_philo_last_eat(t_philo *philo, pthread_mutex_t *philo_mutex);
+int				set_philo_state(t_philo *philo, pthread_mutex_t *philo_mutex, t_state state);
+
 
 long	get_time_passed(struct timeval start_time);
 int		better_sleep(t_thread_input input, long sleep_time);
