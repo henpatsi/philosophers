@@ -6,13 +6,13 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/02/29 10:51:41 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/02/29 11:15:56 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SOURCES = $(addprefix srcs/, main.c prepare.c mutex_helpers.c start_threads.c monitor.c philo_start.c philo_actions.c fork_actions.c state.c better_sleep.c ft_atoi.c)
+SOURCES = $(addprefix srcs/, main.c prepare.c mutex_helpers.c start_threads.c philo_start.c philo_actions.c fork_actions.c state.c better_sleep.c ft_atoi.c)
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -20,7 +20,7 @@ INCLUDES = -I ./includes/
 
 DEBUG = -g -fsanitize=thread
 
-CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES) $(DEBUG)
+CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES)
 
 all: $(NAME)
 

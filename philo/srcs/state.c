@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:57:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 09:54:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 11:11:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,24 @@ long	get_time_passed(struct timeval start_time)
 	return (ms);
 }
 
-int	print_fork(t_philo philo, t_args args)
-{
-	long	ms;
-
-	ms = get_time_passed(args.start_time);
-	if (ms == -1)
-		return (-1);
-	printf("%ld %d %s\n", ms, philo.num + 1, "has taken a fork");
-	return (1);
-}
-
-int	print_state(t_philo philo, t_args args)
+int	print_state(t_thread_input input)
 {
 	long	ms;
 	char	*state_str;
 
-	ms = get_time_passed(args.start_time);
+	ms = get_time_passed(input.args.start_time);
 	if (ms == -1)
 		return (-1);
-	if (philo.state == EAT)
+	if (input.philo->state == EAT)
 		state_str = "is eating";
-	else if (philo.state == SLEEP)
+	else if (input.philo->state == SLEEP)
 		state_str = "is sleeping";
-	else if (philo.state == THINK)
+	else if (input.philo->state == THINK)
 		state_str = "is thinking";
-	else if (philo.state == DEAD)
+	else if (input.philo->state == DEAD)
 		state_str = "died";
 	else
 		state_str = "";
-	printf("%ld %d %s\n", ms, philo.num + 1, state_str);
+	printf("%ld %d %s\n", ms, input.num + 1, state_str);
 	return (1);
 }

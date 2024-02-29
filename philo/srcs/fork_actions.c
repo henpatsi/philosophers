@@ -6,49 +6,44 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 10:06:55 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 11:06:53 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	one_fork_death(t_philo *philo, t_args args, t_mutexes *mutexes, pthread_mutex_t *fork)
+int	print_fork(t_thread_input input)
 {
-	better_sleep(philo, args, mutexes, args.die_time * 2);
-	pthread_mutex_unlock(fork);
-	return (-1);
-}
+	long	ms;
 
-int	put_down_forks(t_philo *philo, t_args args, t_mutexes *mutexes)
-{
-	pthread_mutex_t	*fork_right;
-	pthread_mutex_t	*fork_left;
-
-	fork_right = &mutexes->forks[philo->num];
-	if (philo->num == 0)
-		fork_left = &mutexes->forks[args.philo_count - 1];
-	else
-		fork_left = &mutexes->forks[philo->num - 1];
-	pthread_mutex_unlock(fork_right);
-	pthread_mutex_unlock(fork_left);
+	ms = get_time_passed(input.args.start_time);
+	if (ms == -1)
+		return (-1);
+	printf("%ld %d %s\n", ms, input.num + 1, "has taken a fork");
 	return (1);
 }
 
-int	pick_up_forks(t_philo *philo, t_args args, t_mutexes *mutexes)
+int	one_fork_death(t_thread_input input)
 {
-	pthread_mutex_t	*fork_right;
-	pthread_mutex_t	*fork_left;
+	better_sleep(input, input.args.die_time * 2);
+	pthread_mutex_unlock(input.right_fork);
+	return (-1);
+}
 
-	fork_right = &mutexes->forks[philo->num];
-	if (philo->num == 0)
-		fork_left = &mutexes->forks[args.philo_count - 1];
-	else
-		fork_left = &mutexes->forks[philo->num - 1];
-	pthread_mutex_lock(fork_right);
-	print_fork(*philo, args);
-	if (args.philo_count == 1)
-		return (one_fork_death(philo, args, mutexes, fork_right));
-	pthread_mutex_lock(fork_left);
-	print_fork(*philo, args);
+int	put_down_forks(t_thread_input input)
+{
+	pthread_mutex_unlock(input.right_fork);
+	pthread_mutex_unlock(input.left_fork);
+	return (1);
+}
+
+int	pick_up_forks(t_thread_input input)
+{
+	pthread_mutex_lock(input.right_fork);
+	print_fork(input);
+	if (input.args.philo_count == 1)
+		return (one_fork_death(input));
+	pthread_mutex_lock(input.left_fork);
+	print_fork(input);
 	return (1);
 }

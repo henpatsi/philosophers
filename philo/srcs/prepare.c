@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 10:52:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 11:21:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	prepare_philosophers(t_philo **philos, t_args args)
 	i = 0;
 	while (i < 0)
 	{
-		(*philos)[i].num = i;
 		(*philos)[i].eat_count = 0;
 		(*philos)[i].last_eat_time = args.start_time;
 		(*philos)[i].state = THINK;
@@ -70,8 +69,9 @@ int	prepare_inputs(t_thread_input **inputs, t_args args, t_mutexes mutexes, t_ph
 	if (*inputs == 0)
 		return (-1);
 	i = 0;
-	while (i < 0)
+	while (i < args.philo_count)
 	{
+		(*inputs)[i].num = i;
 		(*inputs)[i].philo = &philos[i];
 		(*inputs)[i].args = args;
 		(*inputs)[i].philo_mutex = &mutexes.philos[i];
@@ -79,7 +79,8 @@ int	prepare_inputs(t_thread_input **inputs, t_args args, t_mutexes mutexes, t_ph
 			(*inputs)[i].left_fork = &mutexes.forks[args.philo_count - 1];
 		else
 			(*inputs)[i].left_fork = &mutexes.forks[i - 1];
-		(*inputs)[i].right_fork = &mutexes.forks[i];
+		(*inputs)[i].right_fork = &mutexes.forks[i];	
+		i++;
 	}
 	return (1);
 }
