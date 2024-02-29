@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/28 13:46:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 09:05:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_args
 	int				eat_count;
 	struct timeval	start_time;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*philos;
 }	t_args;
 
 typedef struct s_philo
@@ -47,7 +48,11 @@ typedef struct s_philo
 	t_args			*args;
 }	t_philo;
 
+int		initialize_mutex(pthread_mutex_t **dst, t_args *args);
+int		destroy_mutex(pthread_mutex_t **dst, t_args *args);
 int		initialize_threads(t_args *args);
+
+int		monitor_start(t_philo *philos, pthread_t *threads, t_args *args);
 
 void	*philo_start(void *arg);
 int		philo_eat(t_philo *philo);

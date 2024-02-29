@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 09:15:23 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/28 10:48:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 08:41:32 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*philo_start(void *arg)
 	if (philo.num % 2 == 0)
 	{
 		philo_think(&philo);
-		usleep(100);
+		usleep(1000);
 	}
 	philo_loop(philo);
 	return (0);

@@ -6,15 +6,16 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/28 10:49:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 08:28:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	one_fork_death(t_philo *philo)
+int	one_fork_death(t_philo *philo, pthread_mutex_t	*fork)
 {
 	better_sleep(philo, philo->args->die_time * 2);
+	pthread_mutex_unlock(fork);
 	return (-1);
 }
 
@@ -46,7 +47,7 @@ int	pick_up_forks(t_philo *philo)
 	pthread_mutex_lock(fork_right);
 	print_fork(*philo);
 	if (philo->args->philo_count == 1)
-		return (one_fork_death(philo));
+		return (one_fork_death(philo, fork_right));
 	pthread_mutex_lock(fork_left);
 	print_fork(*philo);
 	return (1);
