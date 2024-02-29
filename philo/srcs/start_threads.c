@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 12:50:32 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 13:20:37 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,5 @@ int	start_threads(t_args args, t_mutexes mutexes, t_philo *philos, t_thread_inpu
 		pthread_create(&threads[i], NULL, &philo_start, &inputs[i]);
 		i++;
 	}
-	i = 0;
-	while (i < args.philo_count)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
-	return (1);
+	return (monitor_start(philos, threads, inputs));
 }

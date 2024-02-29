@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:48:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 12:49:56 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 13:00:46 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 
 int	philo_die(t_thread_input input)
 {
-	input.philo->state = DEAD;
-	print_state(input);
+	set_philo_state(input, DEAD);
 	return (1);
 }
 
 int	philo_eat(t_thread_input input)
 {
-	input.philo->state = EAT;
-	print_state(input);
+	set_philo_state(input, EAT);
 	increment_philo_eat_count(input.philo, input.philo_mutex);
-	if (gettimeofday(&input.philo->last_eat_time, NULL) == -1)
-		return (-1);
+	set_philo_last_eat(input.philo, input.philo_mutex);
 	if (better_sleep(input, input.args.eat_time) == -1)
 		return (-1);
 	put_down_forks(input);
@@ -34,8 +31,7 @@ int	philo_eat(t_thread_input input)
 
 int	philo_sleep(t_thread_input input)
 {
-	input.philo->state = SLEEP;
-	print_state(input);
+	set_philo_state(input, SLEEP);
 	if (better_sleep(input, input.args.sleep_time) == -1)
 		return (-1);
 	return (1);
@@ -43,7 +39,6 @@ int	philo_sleep(t_thread_input input)
 
 int	philo_think(t_thread_input input)
 {
-	input.philo->state = THINK;
-	print_state(input);
+	set_philo_state(input, THINK);
 	return (1);
 }

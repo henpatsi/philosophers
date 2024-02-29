@@ -6,11 +6,23 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:27:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 12:43:30 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 13:19:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+long	get_time_passed(t_timeval start_time)
+{
+	t_timeval	time;
+	long			ms;
+
+	if (gettimeofday(&time, NULL) == -1)
+		return (-1);
+	ms = (time.tv_sec - start_time.tv_sec) * 1000;
+	ms += (time.tv_usec - start_time.tv_usec) / 1000;
+	return (ms);
+}
 
 int	get_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex)
 {
@@ -22,9 +34,9 @@ int	get_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex)
 	return (ret);
 }
 
-struct timeval	get_philo_eat_time(t_philo *philo, pthread_mutex_t *philo_mutex)
+t_timeval	get_philo_eat_time(t_philo *philo, pthread_mutex_t *philo_mutex)
 {
-	struct timeval	ret;
+	t_timeval	ret;
 
 	pthread_mutex_lock(philo_mutex);
 	ret = philo->last_eat_time;
