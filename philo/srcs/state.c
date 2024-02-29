@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:57:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/26 12:58:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 09:54:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,23 @@ long	get_time_passed(struct timeval start_time)
 	return (ms);
 }
 
-int	print_fork(t_philo philo)
+int	print_fork(t_philo philo, t_args args)
 {
 	long	ms;
 
-	ms = get_time_passed(philo.args->start_time);
+	ms = get_time_passed(args.start_time);
 	if (ms == -1)
 		return (-1);
 	printf("%ld %d %s\n", ms, philo.num + 1, "has taken a fork");
 	return (1);
 }
 
-int	print_state(t_philo philo)
+int	print_state(t_philo philo, t_args args)
 {
 	long	ms;
 	char	*state_str;
 
-	ms = get_time_passed(philo.args->start_time);
+	ms = get_time_passed(args.start_time);
 	if (ms == -1)
 		return (-1);
 	if (philo.state == EAT)

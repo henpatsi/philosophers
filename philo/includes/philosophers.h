@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 09:05:04 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/29 10:49:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,13 @@ typedef struct s_args
 	int				sleep_time;
 	int				eat_count;
 	struct timeval	start_time;
+}	t_args;
+
+typedef struct s_mutexes
+{
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*philos;
-}	t_args;
+}	t_mutexes;
 
 typedef struct s_philo
 {
@@ -45,29 +49,47 @@ typedef struct s_philo
 	int				eat_count;
 	struct timeval	last_eat_time;
 	t_state			state;
-	t_args			*args;
 }	t_philo;
 
-int		initialize_mutex(pthread_mutex_t **dst, t_args *args);
-int		destroy_mutex(pthread_mutex_t **dst, t_args *args);
-int		initialize_threads(t_args *args);
+typedef struct s_thread_input
+{
+	t_philo			*philo;
+	t_args			args;
+	pthread_mutex_t	*philo_mutex;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+}	t_thread_input;
 
-int		monitor_start(t_philo *philos, pthread_t *threads, t_args *args);
+int		prepare_args(t_args	*args, int argc, char **argv);
+int		prepare_mutexes(t_mutexes *mutexes, t_args args);
+int		prepare_philosophers(t_philo **philos, t_args args);
+int		prepare_inputs(t_thread_input **inputs, t_args args, t_mutexes mutexes, t_philo *philos);
 
+int		initialize_mutex_list(pthread_mutex_t **dst, t_args args);
+int		destroy_mutex_list(pthread_mutex_t **dst, t_args args);
+
+int		start_threads(t_args args, t_mutexes mutexes, t_philo *philos, t_thread_input *inputs);
+
+
+
+
+
+int		monitor_start(t_philo *philos, pthread_t *threads, t_thread_input *input);
 void	*philo_start(void *arg);
-int		philo_eat(t_philo *philo);
-int		philo_sleep(t_philo *philo);
-int		philo_think(t_philo *philo);
-int		philo_die(t_philo *philo);
 
-int		put_down_forks(t_philo *philo);
-int		pick_up_forks(t_philo *philo);
+int		philo_die(t_philo *philo, t_args args, t_mutexes *mutexes);
+int		philo_eat(t_philo *philo, t_args args, t_mutexes *mutexes);
+int		philo_sleep(t_philo *philo, t_args args, t_mutexes *mutexes);
+int		philo_think(t_philo *philo, t_args args, t_mutexes *mutexes);
 
-int		better_sleep(t_philo *philo, long sleep_time);
+int		pick_up_forks(t_philo *philo, t_args args, t_mutexes *forks);
+int		put_down_forks(t_philo *philo, t_args args, t_mutexes *forks);
+
+int		better_sleep(t_philo *philo, t_args args, t_mutexes *mutexes, long sleep_time);
 
 long	get_time_passed(struct timeval start_time);
-int		print_fork(t_philo philo);
-int		print_state(t_philo philo);
+int		print_fork(t_philo philo, t_args args);
+int		print_state(t_philo philo, t_args args);
 
 int		ft_atoi(const char *str);
 

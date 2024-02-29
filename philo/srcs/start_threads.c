@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   monitor.c                                          :+:      :+:    :+:   */
+/*   start_threads.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 09:34:25 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 09:39:21 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/02/29 10:50:37 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	monitor_start(t_philo *philos, pthread_t *threads, t_thread_input *input)
+int	start_threads(t_args args, t_mutexes mutexes, t_philo *philos, t_thread_input *inputs)
 {
-	(void) philos;
-	(void) threads;
-	(void) input;
+	pthread_t	*threads;
+	int			i;
 
-	int i = 0;
-	while (1)
+	threads = malloc(args.philo_count * sizeof(pthread_t));
+	if (threads == 0)
+		return (-1);
+	i = 0;
+	while (i < args.philo_count)
+	{
+		pthread_create(&threads[i], NULL, &philo_start, &inputs[i]);
 		i++;
-
-	return (0);
+	}
+	monitor_start(args, mutexes, philos);
+	return (1);
 }
