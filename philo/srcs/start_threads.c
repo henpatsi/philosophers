@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 08:58:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 09:15:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@ int	start_threads(t_args args, t_mutexes mutexes, t_philo *philos, t_thread_inpu
 {
 	pthread_t	*threads;
 	int			i;
-
-	(void) mutexes;
-	(void) philos;
 
 	threads = malloc(args.philo_count * sizeof(pthread_t));
 	if (threads == 0)

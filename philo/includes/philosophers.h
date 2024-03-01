@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 13:25:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 09:56:03 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_philo
 	int				eat_count;
 	struct timeval	last_eat_time;
 	t_state			state;
+	int				exiting;
 }	t_philo;
 
 typedef struct s_thread_input
@@ -85,11 +86,12 @@ int			put_down_forks(t_thread_input input);
 int			get_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex);
 t_timeval	get_philo_eat_time(t_philo *philo, pthread_mutex_t *philo_mutex);
 t_state		get_philo_state(t_philo *philo, pthread_mutex_t *philo_mutex);
+int			get_philo_exiting(t_philo *philo, pthread_mutex_t *philo_mutex);
 
 int			increment_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex);
 int			set_philo_last_eat(t_philo *philo, pthread_mutex_t *philo_mutex);
 int			set_philo_state(t_thread_input input, t_state state);
-
+int			set_philo_exiting(t_philo *philo, pthread_mutex_t *philo_mutex);
 
 long		get_time_passed(t_timeval start_time);
 int			better_sleep(t_thread_input input, long sleep_time);

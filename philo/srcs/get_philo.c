@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:27:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 13:19:01 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 09:54:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ t_state	get_philo_state(t_philo *philo, pthread_mutex_t *philo_mutex)
 
 	pthread_mutex_lock(philo_mutex);
 	ret = philo->state;
+	pthread_mutex_unlock(philo_mutex);
+	return (ret);
+}
+
+int	get_philo_exiting(t_philo *philo, pthread_mutex_t *philo_mutex)
+{
+	int	ret;
+
+	pthread_mutex_lock(philo_mutex);
+	ret = philo->exiting;
 	pthread_mutex_unlock(philo_mutex);
 	return (ret);
 }
