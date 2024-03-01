@@ -27,6 +27,17 @@ test_error()
 	rm -f $OUTFILE
 }
 
+test_philo_death()
+{
+	DEATH_COUNT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "died" | wc -l )
+	if [ $DEATH_COUNT -ge 1 ]
+	then
+		echo -e ${GREEN}"$DEATH_TIME: [OK]"${NC}
+	else
+		echo -e ${RED}"$DEATH_TIME: [KO]"${NC}
+	fi
+}
+
 test_philo_count()
 {
 	TIMES_EATEN=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "is eating" | wc -l )
@@ -107,6 +118,24 @@ fi
 rm -f $OUTFILE
 
 
+
+echo -e ${CYAN}"--- TEST PHILO DEATHS ---"${NC}
+
+PHILO_COUNT=4
+EAT_TIME=200
+SLEEP_TIME=200
+EAT_LIMIT=4
+
+DEATH_TIME=1
+test_philo_death
+DEATH_TIME=100
+test_philo_death
+DEATH_TIME=200
+test_philo_death
+DEATH_TIME=300
+test_philo_death
+DEATH_TIME=390
+test_philo_death
 
 echo -e ${CYAN}"--- TEST PHILO COUNTS ---"${NC}
 
