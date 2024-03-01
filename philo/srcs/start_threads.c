@@ -6,13 +6,14 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 09:15:40 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 10:47:38 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	start_threads(t_args args, t_mutexes mutexes, t_philo *philos, t_thread_input *inputs)
+int	start_threads(t_args args, t_mutexes mutexes,
+		t_philo *philos, t_thread_input *inputs)
 {
 	pthread_t	*threads;
 	int			i;
@@ -26,5 +27,5 @@ int	start_threads(t_args args, t_mutexes mutexes, t_philo *philos, t_thread_inpu
 		pthread_create(&threads[i], NULL, &philo_start, &inputs[i]);
 		i++;
 	}
-	return (monitor_start(args, mutexes, philos, threads));
+	return (monitor_start(args, mutexes.philos, philos, threads));
 }

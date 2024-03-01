@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:37:38 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 09:55:55 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 10:52:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	print_state(t_thread_input input)
 	return (1);
 }
 
-int	increment_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex)
+int	increment_philo_eat_count(t_philo *philo, t_mutex *philo_mutex)
 {
 	pthread_mutex_lock(philo_mutex);
 	philo->eat_count++;
@@ -42,7 +42,7 @@ int	increment_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex)
 	return (1);
 }
 
-int	set_philo_last_eat(t_philo *philo, pthread_mutex_t *philo_mutex)
+int	set_philo_last_eat(t_philo *philo, t_mutex *philo_mutex)
 {
 	pthread_mutex_lock(philo_mutex);
 	if (gettimeofday(&philo->last_eat_time, NULL) == -1)
@@ -63,7 +63,7 @@ int	set_philo_state(t_thread_input input, t_state state)
 	return (1);
 }
 
-int	set_philo_exiting(t_philo *philo, pthread_mutex_t *philo_mutex)
+int	set_philo_exiting(t_philo *philo, t_mutex *philo_mutex)
 {
 	pthread_mutex_lock(philo_mutex);
 	philo->exiting = 1;

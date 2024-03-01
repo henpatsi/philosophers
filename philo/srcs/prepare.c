@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 09:53:48 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 10:47:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	prepare_philosophers(t_philo **philos, t_args args)
 	return (1);
 }
 
-int	prepare_inputs(t_thread_input **inputs, t_args args, t_mutexes mutexes, t_philo *philos)
+int	prepare_inputs(t_thread_input **inputs, t_args args,
+		t_mutexes mutexes, t_philo *philos)
 {
 	int	i;
 
@@ -79,7 +80,7 @@ int	prepare_inputs(t_thread_input **inputs, t_args args, t_mutexes mutexes, t_ph
 			(*inputs)[i].left_fork = &mutexes.forks[args.philo_count - 1];
 		else
 			(*inputs)[i].left_fork = &mutexes.forks[i - 1];
-		(*inputs)[i].right_fork = &mutexes.forks[i];	
+		(*inputs)[i].right_fork = &mutexes.forks[i];
 		i++;
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 09:47:27 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 11:18:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 10:46:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char **argv)
 	t_mutexes		mutexes;
 	t_philo			*philos;
 	t_thread_input	*inputs;
-	int			ret;
+	int				ret;
 
 	if (prepare_args(&args, argc, argv) == -1)
 		return (1);

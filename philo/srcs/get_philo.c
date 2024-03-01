@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:27:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 09:54:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 10:51:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 long	get_time_passed(t_timeval start_time)
 {
 	t_timeval	time;
-	long			ms;
+	long		ms;
 
 	if (gettimeofday(&time, NULL) == -1)
 		return (-1);
@@ -24,7 +24,7 @@ long	get_time_passed(t_timeval start_time)
 	return (ms);
 }
 
-int	get_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex)
+int	get_philo_eat_count(t_philo *philo, t_mutex *philo_mutex)
 {
 	int	ret;
 
@@ -34,7 +34,7 @@ int	get_philo_eat_count(t_philo *philo, pthread_mutex_t *philo_mutex)
 	return (ret);
 }
 
-t_timeval	get_philo_eat_time(t_philo *philo, pthread_mutex_t *philo_mutex)
+t_timeval	get_philo_eat_time(t_philo *philo, t_mutex *philo_mutex)
 {
 	t_timeval	ret;
 
@@ -44,7 +44,7 @@ t_timeval	get_philo_eat_time(t_philo *philo, pthread_mutex_t *philo_mutex)
 	return (ret);
 }
 
-t_state	get_philo_state(t_philo *philo, pthread_mutex_t *philo_mutex)
+t_state	get_philo_state(t_philo *philo, t_mutex *philo_mutex)
 {
 	t_state	ret;
 
@@ -54,7 +54,7 @@ t_state	get_philo_state(t_philo *philo, pthread_mutex_t *philo_mutex)
 	return (ret);
 }
 
-int	get_philo_exiting(t_philo *philo, pthread_mutex_t *philo_mutex)
+int	get_philo_exiting(t_philo *philo, t_mutex *philo_mutex)
 {
 	int	ret;
 
