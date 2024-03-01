@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:46:15 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 12:32:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,6 @@ int			set_philo_exiting(t_philo *philo, t_mutex *philo_mutex);
 
 long		get_time_passed(t_timeval start_time);
 int			better_sleep(t_thread_input input, long sleep_time);
-int			ft_atoi(const char *str);
+int			extract_arg(int	*dst, const char *str);
 
 #endif

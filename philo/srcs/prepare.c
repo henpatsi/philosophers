@@ -6,25 +6,39 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:47:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/01 13:22:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	prepare_args(t_args	*args, int argc, char **argv)
+int	check_arg_count(int argc)
 {
 	if (argc < 5 || argc > 6)
 	{
-		printf("program takes 4 or 5 arguments\n");
+		printf("Error: program takes 4 or 5 arguments\n");
 		return (-1);
 	}
-	args->philo_count = ft_atoi(argv[1]);
-	args->die_time = ft_atoi(argv[2]);
-	args->eat_time = ft_atoi(argv[3]);
-	args->sleep_time = ft_atoi(argv[4]);
+	return (1);
+}
+
+int	prepare_args(t_args	*args, int argc, char **argv)
+{
+	if (check_arg_count(argc) == -1)
+		return (-1);
+	if (extract_arg(&args->philo_count, argv[1]) == -1)
+		return (-1);
+	if (extract_arg(&args->die_time, argv[2]) == -1)
+		return (-1);
+	if (extract_arg(&args->eat_time, argv[3]) == -1)
+		return (-1);
+	if (extract_arg(&args->sleep_time, argv[4]) == -1)
+		return (-1);
 	if (argc == 6)
-		args->eat_count = ft_atoi(argv[5]);
+	{
+		if (extract_arg(&args->eat_count, argv[5]) == -1)
+			return (-1);
+	}
 	else
 		args->eat_count = 0;
 	if (gettimeofday(&args->start_time, NULL) == -1)
