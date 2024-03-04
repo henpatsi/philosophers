@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 09:34:25 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 09:27:22 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 10:41:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ int	philo_dead(t_args args, t_philo *philos,
 	while (i < args.philo_count)
 	{
 		state = get_philo_state(&philos[i], &philo_mutexes[i]);
-		if (state == THINK
-			&& philo_has_died(args, &philos[i], &philo_mutexes[i]))
+		if (state != DEAD && philo_has_died(args, &philos[i], &philo_mutexes[i]))
 		{
 			kill_philo(args, &philos[i], &philo_mutexes[i], i);
 			state = DEAD;
@@ -91,7 +90,7 @@ int	monitor_start(t_args args, t_mutex *philo_mutexes,
 {
 	while (1)
 	{
-		usleep(100);
+		usleep(200);
 		if (args.eat_count != 0)
 		{
 			if (all_finished(args, philos, philo_mutexes, threads))

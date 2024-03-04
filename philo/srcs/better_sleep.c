@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 08:49:26 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 09:03:55 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 10:41:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,16 @@ int	philo_has_died(t_args args, t_philo *philo, t_mutex *philo_mutex)
 int	better_sleep(t_thread_input input, long sleep_time)
 {
 	t_timeval	sleep_start;
-	int			philo_dead;
 
 	if (gettimeofday(&sleep_start, NULL) == -1)
 		return (-1);
 	while (get_time_passed(sleep_start) < sleep_time)
 	{
 		usleep(200);
-		philo_dead = philo_has_died(input.args, input.philo, input.philo_mutex);
-		if (philo_dead || get_philo_exiting(input.philo, input.philo_mutex))
+		if (get_philo_exiting(input.philo, input.philo_mutex))
 		{
 			if (get_philo_state(input.philo, input.philo_mutex) == EAT)
 				put_down_forks(input);
-			if (philo_dead)
-				philo_die(input);
 			return (-1);
 		}
 	}

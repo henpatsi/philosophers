@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 15:18:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 10:27:39 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	prepare_philosophers(t_philo **philos, t_args args)
 		(*philos)[i].eat_count = 0;
 		(*philos)[i].state = THINK;
 		(*philos)[i].exiting = 0;
+		(*philos)[i].last_eat_time.tv_sec = args.start_time.tv_sec;
+		(*philos)[i].last_eat_time.tv_usec = args.start_time.tv_usec;
 		i++;
 	}
 	return (1);
