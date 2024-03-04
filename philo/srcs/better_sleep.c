@@ -6,18 +6,18 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 08:49:26 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:11:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:03:55 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	philo_had_died(t_thread_input input)
+int	philo_has_died(t_args args, t_philo *philo, t_mutex *philo_mutex)
 {
 	t_timeval	time_since_eat;
 
-	time_since_eat = get_philo_eat_time(input.philo, input.philo_mutex);
-	if (get_time_passed(time_since_eat) > input.args.die_time)
+	time_since_eat = get_philo_eat_time(philo, philo_mutex);
+	if (get_time_passed(time_since_eat) > args.die_time)
 		return (1);
 	return (0);
 }
@@ -32,7 +32,7 @@ int	better_sleep(t_thread_input input, long sleep_time)
 	while (get_time_passed(sleep_start) < sleep_time)
 	{
 		usleep(200);
-		philo_dead = philo_had_died(input);
+		philo_dead = philo_has_died(input.args, input.philo, input.philo_mutex);
 		if (philo_dead || get_philo_exiting(input.philo, input.philo_mutex))
 		{
 			if (get_philo_state(input.philo, input.philo_mutex) == EAT)

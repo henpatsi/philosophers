@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:48:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:13:38 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:50:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	philo_eat(t_thread_input input)
 {
 	set_philo_state(input, EAT);
 	increment_philo_eat_count(input.philo, input.philo_mutex);
-	set_philo_last_eat(input.philo, input.philo_mutex);
+	set_philo_last_eat(input.philo, input.philo_mutex, 0);
 	if (better_sleep(input, input.args.eat_time) == -1)
 		return (-1);
 	put_down_forks(input);

@@ -29,7 +29,7 @@ test_error()
 
 test_philo_death()
 {
-	DEATH_COUNT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "died" | wc -l )
+	DEATH_COUNT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | tail -1 | grep "died" | wc -l )
 	if [ $DEATH_COUNT -ge 1 ]
 	then
 		echo -e ${GREEN}"$DEATH_TIME: [OK]"${NC}
@@ -90,6 +90,8 @@ test_error
 
 ARG="$PHILO 0 $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT"
 test_error
+ARG="$PHILO -4 $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT"
+test_error
 
 OUT=$( ./philo 4 400 " " 200 )
 echo "$OUT" > $OUTFILE
@@ -137,16 +139,35 @@ test_philo_death
 DEATH_TIME=390
 test_philo_death
 
+DEATH_TIME=310
+PHILO_COUNT=3
+EAT_TIME=200
+SLEEP_TIME=100
+test_philo_death
+
+PHILO_COUNT=1
+DEATH_TIME=410
+EAT_LIMIT=1
+test_philo_death
+
+
+
+
 echo -e ${CYAN}"--- TEST PHILO COUNTS ---"${NC}
 
 DEATH_TIME=410
-EAT_TIME=200
 SLEEP_TIME=200
 EAT_LIMIT=2
 
 PHILO_COUNT=1
 while [ $PHILO_COUNT -le 10 ]
 do
+	if [ $(( $PHILO_COUNT % 2 )) -eq 0 ]
+	then
+		EAT_TIME=200;
+	else
+		EAT_TIME=100;
+	fi
 	test_philo_count
 	PHILO_COUNT=$(( $PHILO_COUNT + 1 ))
 done

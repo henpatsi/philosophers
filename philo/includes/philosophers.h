@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 12:32:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:49:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,13 @@ t_state		get_philo_state(t_philo *philo, t_mutex *philo_mutex);
 int			get_philo_exiting(t_philo *philo, t_mutex *philo_mutex);
 
 int			increment_philo_eat_count(t_philo *philo, t_mutex *philo_mutex);
-int			set_philo_last_eat(t_philo *philo, t_mutex *philo_mutex);
+int			set_philo_last_eat(t_philo *philo, t_mutex *philo_mutex,
+				t_timeval *time);
 int			set_philo_state(t_thread_input input, t_state state);
 int			set_philo_exiting(t_philo *philo, t_mutex *philo_mutex);
 
 long		get_time_passed(t_timeval start_time);
+int			philo_has_died(t_args args, t_philo *philo, t_mutex *philo_mutex);
 int			better_sleep(t_thread_input input, long sleep_time);
 int			extract_arg(int	*dst, const char *str);
 

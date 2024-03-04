@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:37:38 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:52:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:53:53 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,15 @@ int	increment_philo_eat_count(t_philo *philo, t_mutex *philo_mutex)
 	return (1);
 }
 
-int	set_philo_last_eat(t_philo *philo, t_mutex *philo_mutex)
+int	set_philo_last_eat(t_philo *philo, t_mutex *philo_mutex, t_timeval *time)
 {
 	pthread_mutex_lock(philo_mutex);
-	if (gettimeofday(&philo->last_eat_time, NULL) == -1)
+	if (time != 0)
+	{
+		philo->last_eat_time.tv_sec = time->tv_sec;
+		philo->last_eat_time.tv_usec = time->tv_usec;
+	}
+	else if (gettimeofday(&philo->last_eat_time, NULL) == -1)
 	{
 		pthread_mutex_unlock(philo_mutex);
 		return (-1);

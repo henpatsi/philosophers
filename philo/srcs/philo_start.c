@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 09:15:23 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:17:35 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:54:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	*philo_start(void *arg)
 	t_thread_input	input;
 
 	input = *(t_thread_input *) arg;
+	set_philo_last_eat(input.philo, input.philo_mutex, &input.args.start_time);
 	if (input.num % 2 == 0)
 	{
-		set_philo_last_eat(input.philo, input.philo_mutex);
 		philo_think(input);
-		better_sleep(input, input.args.eat_time / 2);
+		better_sleep(input, input.args.eat_time / 10);
 	}
 	philo_loop(input);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/29 11:06:53 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:21:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,23 @@ int	put_down_forks(t_thread_input input)
 int	pick_up_forks(t_thread_input input)
 {
 	pthread_mutex_lock(input.right_fork);
+	if (get_philo_state(input.philo, input.philo_mutex) == DEAD
+		|| input.philo->exiting)
+	{
+		pthread_mutex_unlock(input.right_fork);
+		return (-1);
+	}
 	print_fork(input);
 	if (input.args.philo_count == 1)
 		return (one_fork_death(input));
 	pthread_mutex_lock(input.left_fork);
+	if (get_philo_state(input.philo, input.philo_mutex) == DEAD
+		|| input.philo->exiting)
+	{
+		pthread_mutex_unlock(input.right_fork);
+		pthread_mutex_unlock(input.left_fork);
+		return (-1);
+	}
 	print_fork(input);
 	return (1);
 }

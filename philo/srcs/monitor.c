@@ -6,26 +6,23 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 09:34:25 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:51:58 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:27:22 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	join_threads(pthread_t *threads, int count)
+int	kill_philo(t_args args, t_philo *philo, t_mutex *philo_mutex, int num)
 {
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
+	pthread_mutex_lock(philo_mutex);
+	philo->state = DEAD;
+	printf("%ld %d died\n", get_time_passed(args.start_time), num + 1);
+	pthread_mutex_unlock(philo_mutex);
 	return (1);
 }
 
-int	set_all_philos_exiting(t_mutex *philo_mutexes, t_philo *philos, int count)
+int	set_all_philos_exiting(t_philo *philos, t_mutex *philo_mutexes,
+		pthread_t *threads, int count)
 {
 	int	i;
 
@@ -35,11 +32,17 @@ int	set_all_philos_exiting(t_mutex *philo_mutexes, t_philo *philos, int count)
 		set_philo_exiting(&philos[i], &philo_mutexes[i]);
 		i++;
 	}
+	i = 0;
+	while (i < count)
+	{
+		pthread_join(threads[i], NULL);
+		i++;
+	}
 	return (1);
 }
 
-int	all_finished(t_args args, t_mutex *philo_mutexes,
-		t_philo *philos, pthread_t *threads)
+int	all_finished(t_args args, t_philo *philos,
+		t_mutex *philo_mutexes, pthread_t *threads)
 {
 	int	i;
 	int	philo_eat_count;
@@ -52,23 +55,30 @@ int	all_finished(t_args args, t_mutex *philo_mutexes,
 			return (0);
 		i++;
 	}
-	set_all_philos_exiting(philo_mutexes, philos, args.philo_count);
-	join_threads(threads, args.philo_count);
+	set_all_philos_exiting(philos, philo_mutexes, threads, args.philo_count);
 	return (1);
 }
 
-int	philo_dead(t_mutex *philo_mutexes, t_philo *philos,
-		pthread_t *threads, int count)
+int	philo_dead(t_args args, t_philo *philos,
+		t_mutex *philo_mutexes, pthread_t *threads)
 {
-	int	i;
+	int		i;
+	t_state	state;
 
 	i = 0;
-	while (i < count)
+	while (i < args.philo_count)
 	{
-		if (get_philo_state(&philos[i], &philo_mutexes[i]) == DEAD)
+		state = get_philo_state(&philos[i], &philo_mutexes[i]);
+		if (state == THINK
+			&& philo_has_died(args, &philos[i], &philo_mutexes[i]))
 		{
-			set_all_philos_exiting(philo_mutexes, philos, count);
-			join_threads(threads, count);
+			kill_philo(args, &philos[i], &philo_mutexes[i], i);
+			state = DEAD;
+		}
+		if (state == DEAD)
+		{
+			set_all_philos_exiting(philos, philo_mutexes,
+				threads, args.philo_count);
 			return (1);
 		}
 		i++;
@@ -84,10 +94,10 @@ int	monitor_start(t_args args, t_mutex *philo_mutexes,
 		usleep(100);
 		if (args.eat_count != 0)
 		{
-			if (all_finished(args, philo_mutexes, philos, threads))
+			if (all_finished(args, philos, philo_mutexes, threads))
 				break ;
 		}
-		if (philo_dead(philo_mutexes, philos, threads, args.philo_count))
+		if (philo_dead(args, philos, philo_mutexes, threads))
 			break ;
 	}
 	return (0);
