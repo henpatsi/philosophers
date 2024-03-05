@@ -29,8 +29,8 @@ test_error()
 
 test_philo_death()
 {
-	DEATH_COUNT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | tail -1 | grep "died" | wc -l )
-	if [ $DEATH_COUNT -ge 1 ]
+	DEATH_COUNT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "died" | wc -l )
+	if [ $DEATH_COUNT -eq 1 ]
 	then
 		echo -e ${GREEN}"$DEATH_TIME: [OK]"${NC}
 	else
@@ -164,15 +164,37 @@ while [ $PHILO_COUNT -le 10 ]
 do
 	if [ $(( $PHILO_COUNT % 2 )) -eq 0 ]
 	then
-		EAT_TIME=200;
+		EAT_TIME=200
 	else
-		EAT_TIME=100;
+		EAT_TIME=100
 	fi
 	test_philo_count
 	PHILO_COUNT=$(( $PHILO_COUNT + 1 ))
 done
 
+PHILO_COUNT=49
+EAT_TIME=100
+test_philo_count
 
+PHILO_COUNT=50
+EAT_TIME=200
+test_philo_count
+
+PHILO_COUNT=99
+EAT_TIME=100
+test_philo_count
+
+PHILO_COUNT=100
+EAT_TIME=200
+test_philo_count
+
+PHILO_COUNT=199
+EAT_TIME=100
+test_philo_count
+
+PHILO_COUNT=200
+EAT_TIME=200
+test_philo_count
 
 echo -e ${CYAN}"--- TEST EAT COUNTS ---"${NC}
 
