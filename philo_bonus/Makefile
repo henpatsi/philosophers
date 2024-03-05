@@ -6,22 +6,23 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/03/04 15:20:43 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/03/05 16:05:38 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 SOURCES = $(addsuffix _bonus.c, $(addprefix srcs/, main prepare extract_arg \
-													start_processes))
+													start_processes \
+													child_start set_philo))
 
 OBJECTS = $(SOURCES:.c=.o)
 
 INCLUDES = -I ./includes/
 
-DEBUG = -g -fsanitize=thread
+DEBUG = -g
 
-CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES) $(DEBUG)
+CFLAGS += -Wall -Wextra -Werror -Wpedantic -Wtype-limits $(INCLUDES) $(DEBUG)
 
 all: $(NAME)
 
