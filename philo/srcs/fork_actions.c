@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 11:41:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:53:55 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	print_fork(t_thread_input input)
 	ms = get_time_passed(input.args.start_time);
 	if (ms == -1)
 		return (-1);
-	printf("%ld %d %s\n", ms, input.num + 1, "has taken a fork");
+	if (!get_philo_exiting(input.philo, input.philo_mutex))
+		printf("%ld %d %s\n", ms, input.num + 1, "has taken a fork");
 	return (1);
 }
 
@@ -40,8 +41,7 @@ int	put_down_forks(t_thread_input input)
 int	pick_up_forks(t_thread_input input)
 {
 	pthread_mutex_lock(input.right_fork);
-	if (get_philo_state(input.philo, input.philo_mutex) == DEAD
-		|| get_philo_exiting(input.philo, input.philo_mutex))
+	if (get_philo_exiting(input.philo, input.philo_mutex))
 	{
 		pthread_mutex_unlock(input.right_fork);
 		return (-1);
@@ -50,8 +50,7 @@ int	pick_up_forks(t_thread_input input)
 	if (input.args.philo_count == 1)
 		return (one_fork_death(input));
 	pthread_mutex_lock(input.left_fork);
-	if (get_philo_state(input.philo, input.philo_mutex) == DEAD
-		|| get_philo_exiting(input.philo, input.philo_mutex))
+	if (get_philo_exiting(input.philo, input.philo_mutex))
 	{
 		pthread_mutex_unlock(input.right_fork);
 		pthread_mutex_unlock(input.left_fork);

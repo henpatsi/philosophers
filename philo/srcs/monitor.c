@@ -6,19 +6,20 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 09:34:25 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 10:41:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:40:42 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	kill_philo(t_args args, t_philo *philo, t_mutex *philo_mutex, int num)
+int	philo_has_died(t_args args, t_philo *philo, t_mutex *philo_mutex)
 {
-	pthread_mutex_lock(philo_mutex);
-	philo->state = DEAD;
-	printf("%ld %d died\n", get_time_passed(args.start_time), num + 1);
-	pthread_mutex_unlock(philo_mutex);
-	return (1);
+	t_timeval	time_since_eat;
+
+	time_since_eat = get_philo_eat_time(philo, philo_mutex);
+	if (get_time_passed(time_since_eat) > args.die_time)
+		return (1);
+	return (0);
 }
 
 int	set_all_philos_exiting(t_philo *philos, t_mutex *philo_mutexes,
@@ -62,20 +63,14 @@ int	all_finished(t_args args, t_philo *philos,
 int	philo_dead(t_args args, t_philo *philos,
 		t_mutex *philo_mutexes, pthread_t *threads)
 {
-	int		i;
-	t_state	state;
+	int	i;
 
 	i = 0;
 	while (i < args.philo_count)
 	{
-		state = get_philo_state(&philos[i], &philo_mutexes[i]);
-		if (state != DEAD && philo_has_died(args, &philos[i], &philo_mutexes[i]))
+		if (philo_has_died(args, &philos[i], &philo_mutexes[i]))
 		{
-			kill_philo(args, &philos[i], &philo_mutexes[i], i);
-			state = DEAD;
-		}
-		if (state == DEAD)
-		{
+			printf("%ld %d died\n", get_time_passed(args.start_time), i + 1);
 			set_all_philos_exiting(philos, philo_mutexes,
 				threads, args.philo_count);
 			return (1);

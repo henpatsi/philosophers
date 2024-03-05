@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:27:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/01 10:51:44 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:31:39 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,6 @@ t_timeval	get_philo_eat_time(t_philo *philo, t_mutex *philo_mutex)
 
 	pthread_mutex_lock(philo_mutex);
 	ret = philo->last_eat_time;
-	pthread_mutex_unlock(philo_mutex);
-	return (ret);
-}
-
-t_state	get_philo_state(t_philo *philo, t_mutex *philo_mutex)
-{
-	t_state	ret;
-
-	pthread_mutex_lock(philo_mutex);
-	ret = philo->state;
 	pthread_mutex_unlock(philo_mutex);
 	return (ret);
 }

@@ -6,14 +6,14 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/03/05 11:23:18 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/03/05 12:57:09 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 SOURCES = $(addprefix srcs/, main.c prepare.c mutex_helpers.c \
-			start_threads.c philo_start.c monitor.c \
+			philo_start.c monitor.c \
 			philo_actions.c fork_actions.c get_philo.c set_philo.c \
 			better_sleep.c extract_arg.c)
 

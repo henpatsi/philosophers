@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 12:19:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:55:53 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef enum e_state
 	EAT,
 	SLEEP,
 	THINK,
-	DEAD,
 }	t_state;
 
 typedef struct s_args
@@ -50,13 +49,13 @@ typedef struct s_philo
 {
 	int			eat_count;
 	t_timeval	last_eat_time;
-	t_state		state;
 	int			exiting;
 }	t_philo;
 
 typedef struct s_thread_input
 {
 	int		num;
+	t_state	state;
 	t_philo	*philo;
 	t_args	args;
 	t_mutex	*philo_mutex;
@@ -88,16 +87,14 @@ int			put_down_forks(t_thread_input input);
 
 int			get_philo_eat_count(t_philo *philo, t_mutex *philo_mutex);
 t_timeval	get_philo_eat_time(t_philo *philo, t_mutex *philo_mutex);
-t_state		get_philo_state(t_philo *philo, t_mutex *philo_mutex);
 int			get_philo_exiting(t_philo *philo, t_mutex *philo_mutex);
 
 int			increment_philo_eat_count(t_philo *philo, t_mutex *philo_mutex);
 int			set_philo_last_eat(t_philo *philo, t_mutex *philo_mutex);
-int			set_philo_state(t_thread_input input, t_state state);
+int			set_philo_state(t_thread_input *input, t_state state);
 int			set_philo_exiting(t_philo *philo, t_mutex *philo_mutex);
 
 long		get_time_passed(t_timeval start_time);
-int			philo_has_died(t_args args, t_philo *philo, t_mutex *philo_mutex);
 int			better_sleep(t_thread_input input, long sleep_time);
 int			extract_arg(int	*dst, const char *str);
 

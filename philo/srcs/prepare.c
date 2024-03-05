@@ -6,26 +6,19 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 10:27:39 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:30:57 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	check_arg_count(int argc)
+int	prepare_args(t_args	*args, int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
 	{
 		printf("Error: program takes 4 or 5 arguments\n");
 		return (-1);
 	}
-	return (1);
-}
-
-int	prepare_args(t_args	*args, int argc, char **argv)
-{
-	if (check_arg_count(argc) == -1)
-		return (-1);
 	if (extract_arg(&args->philo_count, argv[1]) == -1)
 		return (-1);
 	if (extract_arg(&args->die_time, argv[2]) == -1)
@@ -69,7 +62,6 @@ int	prepare_philosophers(t_philo **philos, t_args args)
 	while (i < args.philo_count)
 	{
 		(*philos)[i].eat_count = 0;
-		(*philos)[i].state = THINK;
 		(*philos)[i].exiting = 0;
 		(*philos)[i].last_eat_time.tv_sec = args.start_time.tv_sec;
 		(*philos)[i].last_eat_time.tv_usec = args.start_time.tv_usec;
@@ -90,6 +82,7 @@ int	prepare_inputs(t_thread_input **inputs, t_args args,
 	while (i < args.philo_count)
 	{
 		(*inputs)[i].num = i;
+		(*inputs)[i].state = THINK;
 		(*inputs)[i].philo = &philos[i];
 		(*inputs)[i].args = args;
 		(*inputs)[i].philo_mutex = &mutexes.philos[i];
