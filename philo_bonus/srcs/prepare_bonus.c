@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 13:56:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/06 13:29:41 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	prepare_args(t_args	*args, int argc, char **argv)
 	return (1);
 }
 
-int	prepare_philosophers(t_philo **philos, sem_t *forks, t_args args)
+int	prepare_philosophers(t_philo **philos, t_args args)
 {
 	int	i;
 
@@ -55,8 +55,19 @@ int	prepare_philosophers(t_philo **philos, sem_t *forks, t_args args)
 		(*philos)[i].exiting = 0;
 		(*philos)[i].last_eat_time.tv_sec = args.start_time.tv_sec;
 		(*philos)[i].last_eat_time.tv_usec = args.start_time.tv_usec;
-		(*philos)[i].forks = forks;
 		i++;
+	}
+	return (1);
+}
+
+int	prepare_forks(sem_t **forks)
+{
+	sem_unlink("/forks");
+	*forks = sem_open("/forks", O_CREAT, 0644, 4);
+	if (*forks == SEM_FAILED)
+	{
+		printf("Error: failed to open semaphore");
+		return (-1);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 16:05:30 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/06 13:46:12 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,27 @@ typedef struct s_philo
 }	t_philo;
 
 int		prepare_args(t_args	*args, int argc, char **argv);
-int		prepare_philosophers(t_philo **philos, sem_t *forks, t_args args);
+int		prepare_philosophers(t_philo **philos, t_args args);
+int		prepare_forks(sem_t **forks);
 int		extract_arg(int	*dst, const char *str);
 
 int		start_processes(t_args args, t_philo *philos);
 
 int		child_start(t_args args, t_philo *philo);
 
+int		philo_eat(t_args args, t_philo *philo);
+int		philo_sleep(t_args args, t_philo *philo);
+
+int		pick_up_forks(t_args args, t_philo *philo);
+int		put_down_forks(t_philo *philo);
+
+
+
 int		set_philo_state(t_args args, t_philo *philo, t_state state);
 
+
+
 long	get_time_passed(t_timeval start_time);
+int		better_sleep(t_args args, t_philo *philo, long sleep_time);
 
 #endif
