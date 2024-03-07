@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/06 13:46:12 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/07 10:18:42 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
-# include <pthread.h>
 
 #include <sys/stat.h>
 #include <semaphore.h>
+ #include <signal.h>
 
 typedef struct timeval	t_timeval;
 
@@ -48,30 +48,21 @@ typedef struct s_philo
 	int			eat_count;
 	t_timeval	last_eat_time;
 	t_state		state;
-	int			exiting;
 	sem_t		*forks;
 }	t_philo;
 
 int		prepare_args(t_args	*args, int argc, char **argv);
 int		prepare_philosophers(t_philo **philos, t_args args);
-int		prepare_forks(sem_t **forks);
+int		prepare_forks(sem_t **forks, int count);
 int		extract_arg(int	*dst, const char *str);
 
 int		start_processes(t_args args, t_philo *philos);
+int		monitor_start(t_args args, t_philo *philos, pid_t *process_ids);
 
 int		child_start(t_args args, t_philo *philo);
-
-int		philo_eat(t_args args, t_philo *philo);
-int		philo_sleep(t_args args, t_philo *philo);
-
 int		pick_up_forks(t_args args, t_philo *philo);
 int		put_down_forks(t_philo *philo);
-
-
-
 int		set_philo_state(t_args args, t_philo *philo, t_state state);
-
-
 
 long	get_time_passed(t_timeval start_time);
 int		better_sleep(t_args args, t_philo *philo, long sleep_time);

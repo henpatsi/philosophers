@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 15:58:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/07 10:18:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-int	start_child(t_args args, t_philo *philos, int i)
+int	create_child(t_args args, t_philo *philos, int i)
 {
 	pid_t	process_id;
 
@@ -34,6 +34,7 @@ int	start_processes(t_args args, t_philo *philos)
 {
 	pid_t	*process_ids;
 	int		i;
+	int		ret;
 
 	process_ids = malloc(args.philo_count * sizeof(pid_t));
 	if (process_ids == 0)
@@ -41,12 +42,15 @@ int	start_processes(t_args args, t_philo *philos)
 	i = 0;
 	while (i < args.philo_count)
 	{
-		process_ids[i] = start_child(args, philos, i);
+		process_ids[i] = create_child(args, philos, i);
+		if (process_ids[i] == -1)
+		{
+			free(process_ids);
+			return (-1);
+		}
 		i++;
 	}
-	//return (monitor_start(args, mutexes.philos, philos, threads));
-	while (get_time_passed(args.start_time) < 10000)
-		usleep(200);
+	ret = monitor_start(args, philos, process_ids);
 	free(process_ids);
-	return (1);
+	return (ret);
 }

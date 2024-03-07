@@ -6,11 +6,30 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/06 13:48:58 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/07 10:18:28 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
+
+int	philo_eat(t_args args, t_philo *philo)
+{
+	set_philo_state(args, philo, EAT);
+	gettimeofday(&philo->last_eat_time, NULL);
+	if (better_sleep(args, philo, args.eat_time) == -1)
+		return (-1);
+	put_down_forks(philo);
+	philo->eat_count++;
+	return (1);
+}
+
+int	philo_sleep(t_args args, t_philo *philo)
+{
+	set_philo_state(args, philo, SLEEP);
+	if (better_sleep(args, philo, args.sleep_time) == -1)
+		return (-1);
+	return (1);
+}
 
 void	child_loop(t_args args, t_philo *philo)
 {
@@ -27,15 +46,8 @@ void	child_loop(t_args args, t_philo *philo)
 }
 
 int	child_start(t_args args, t_philo *philo)
-{
-	long	ms;
-
-	ms = get_time_passed(args.start_time);
-	if (ms == -1)
-		return (-1);
-	printf("%ld %d %s\n", ms, philo->num + 1, "child created");
-	
-	philo->forks = sem_open("/forks", O_RDWR);
+{	
+	philo->forks = sem_open("/forks", O_RDONLY);
 	set_philo_state(args, philo, THINK);
 	child_loop(args, philo);
 	return (1);

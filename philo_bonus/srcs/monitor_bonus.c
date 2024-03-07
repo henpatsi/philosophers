@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_actions_bonus.c                              :+:      :+:    :+:   */
+/*   monitor_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/26 14:48:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/06 13:48:51 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/03/07 09:08:21 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/03/07 10:06:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-int	philo_eat(t_args args, t_philo *philo)
+int	monitor_start(t_args args, t_philo *philos, pid_t *process_ids)
 {
-	set_philo_state(args, philo, EAT);
-	philo->eat_count++;
-	gettimeofday(&philo->last_eat_time, NULL);
-	if (better_sleep(args, philo, args.eat_time) == -1)
-		return (-1);
-	put_down_forks(philo);
-	return (1);
-}
+	int	i;
 
-int	philo_sleep(t_args args, t_philo *philo)
-{
-	set_philo_state(args, philo, SLEEP);
-	if (better_sleep(args, philo, args.sleep_time) == -1)
-		return (-1);
+	(void) args;
+	(void) philos;
+	(void) process_ids;
+
+	waitpid(-1, NULL, 0);
+	i = 0;
+	while (i < args.philo_count)
+	{
+		kill(process_ids[i], SIGQUIT);
+		i++;
+	}
+
 	return (1);
 }
