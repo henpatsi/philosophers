@@ -6,21 +6,22 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/12 09:42:41 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/12 14:02:53 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
+#ifndef PHILOSOPHERS_BONUS_H
+# define PHILOSOPHERS_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
 
-#include <sys/stat.h>
-#include <semaphore.h>
-#include <signal.h>
+# include <sys/stat.h>
+# include <semaphore.h>
+# include <signal.h>
+# include <pthread.h>
 
 typedef struct timeval	t_timeval;
 
@@ -36,6 +37,8 @@ typedef struct s_sems
 {
 	sem_t	*forks;
 	sem_t	*full;
+	sem_t	*all_full;
+	sem_t	*dead;
 	sem_t	*write;
 }	t_sems;
 
@@ -56,6 +59,7 @@ typedef struct s_philo
 	t_timeval	last_eat_time;
 	t_state		state;
 	t_sems		sems;
+	int			exit;
 }	t_philo;
 
 int		prepare_args(t_args	*args, int argc, char **argv);
@@ -63,10 +67,11 @@ int		prepare_philosophers(t_philo **philos, t_args args);
 int		prepare_semaphores(t_sems *sems, int count);
 int		extract_arg(int	*dst, const char *str);
 
-int		start_processes(t_args args, t_philo *philos, t_sems *sems);
-int		monitor_start(t_args args, pid_t *process_ids, t_sems *sems);
+int		start_processes(t_args args, t_philo *philos);
 
 int		child_start(t_args args, t_philo *philo);
+int		philo_eat(t_args args, t_philo *philo);
+int		philo_sleep(t_args args, t_philo *philo);
 int		pick_up_forks(t_args args, t_philo *philo);
 int		put_down_forks(t_philo *philo);
 int		set_philo_state(t_args args, t_philo *philo, t_state state);
