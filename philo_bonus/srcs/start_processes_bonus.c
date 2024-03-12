@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/07 12:09:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/07 12:53:48 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	create_child(t_args args, t_philo *philos, int i)
 	return (process_id);
 }
 
-int	start_processes(t_args args, t_philo *philos, sem_t *full)
+int	start_processes(t_args args, t_philo *philos, t_sems *sems)
 {
 	pid_t	*process_ids;
 	int		i;
@@ -50,7 +50,7 @@ int	start_processes(t_args args, t_philo *philos, sem_t *full)
 		}
 		i++;
 	}
-	ret = monitor_start(args, process_ids, full);
+	ret = monitor_start(args, process_ids, sems);
 	free(process_ids);
 	return (ret);
 }

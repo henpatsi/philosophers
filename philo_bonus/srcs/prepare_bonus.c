@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/07 11:55:12 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/12 09:48:46 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,32 @@ int	prepare_philosophers(t_philo **philos, t_args args)
 	return (1);
 }
 
-int	prepare_semaphores(sem_t **forks, sem_t **full, int count)
+int	prepare_semaphores(t_sems *sems, int count)
 {
 	sem_unlink("/forks");
-	*forks = sem_open("/forks", O_CREAT, 0644, count);
-	if (*forks == SEM_FAILED)
+	sems->forks = sem_open("/forks", O_CREAT, 0644, count);
+	if (sems->forks == SEM_FAILED)
 	{
 		printf("Error: failed to open semaphore");
 		return (-1);
 	}
 	sem_unlink("/full");
-	*full = sem_open("/full", O_CREAT, 0644, 0);
-	if (*full == SEM_FAILED)
+	sems->full = sem_open("/full", O_CREAT, 0644, 0);
+	if (sems->full == SEM_FAILED)
 	{
 		sem_unlink("/forks");
-		sem_close(*forks);
+		sem_close(sems->forks);
+		printf("Error: failed to open semaphore");
+		return (-1);
+	}
+	sem_unlink("/write");
+	sems->write = sem_open("/write", O_CREAT, 0644, 1);
+	if (sems->write == SEM_FAILED)
+	{
+		sem_unlink("/forks");
+		sem_close(sems->forks);
+		sem_unlink("/full");
+		sem_close(sems->full);
 		printf("Error: failed to open semaphore");
 		return (-1);
 	}

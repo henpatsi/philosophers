@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/07 12:13:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/12 09:44:15 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	philo_eat(t_args args, t_philo *philo)
 	put_down_forks(philo);
 	philo->eat_count++;
 	if (philo->eat_count == args.eat_count)
-		sem_post(philo->full);
+		sem_post(philo->sems.full);
 	return (1);
 }
 
@@ -48,9 +48,10 @@ void	child_loop(t_args args, t_philo *philo)
 }
 
 int	child_start(t_args args, t_philo *philo)
-{	
-	philo->forks = sem_open("/forks", O_RDONLY);
-	philo->full = sem_open("/full", O_RDONLY);
+{
+	philo->sems.forks = sem_open("/forks", O_RDONLY);
+	philo->sems.full = sem_open("/full", O_RDONLY);
+	philo->sems.write = sem_open("/write", O_RDONLY);
 	set_philo_state(args, philo, THINK);
 	child_loop(args, philo);
 	return (1);

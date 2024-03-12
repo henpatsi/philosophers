@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:37:38 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/07 10:17:20 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/12 09:47:57 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ void	print_state(t_args args, t_philo philo)
 		state_str = "is thinking";
 	else
 		state_str = "";
+	sem_wait(philo.sems.write);
 	printf("%ld %d %s\n", ms, philo.num + 1, state_str);
+	sem_post(philo.sems.write);
 }
 
 int	set_philo_state(t_args args, t_philo *philo, t_state state)

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 08:49:26 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/07 09:55:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/12 09:49:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	philo_die(t_args args, t_philo *philo)
 {
 	if (philo->state == EAT)
 		put_down_forks(philo);
+	sem_wait(philo->sems.write);
 	printf("%ld %d died\n", get_time_passed(args.start_time), philo->num + 1);
 	return (-1);
 }
