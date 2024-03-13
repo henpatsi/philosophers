@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/12 14:02:53 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 09:39:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,12 @@ typedef enum e_state
 	EAT,
 	SLEEP,
 	THINK,
-	DEAD,
 }	t_state;
 
 typedef struct s_sems
 {
 	sem_t	*forks;
 	sem_t	*full;
-	sem_t	*all_full;
 	sem_t	*dead;
 	sem_t	*write;
 }	t_sems;
@@ -66,9 +64,9 @@ int		prepare_args(t_args	*args, int argc, char **argv);
 int		prepare_philosophers(t_philo **philos, t_args args);
 int		prepare_semaphores(t_sems *sems, int count);
 int		extract_arg(int	*dst, const char *str);
+void	free_all(t_philo *philos, t_sems *sems);
 
 int		start_processes(t_args args, t_philo *philos);
-
 int		child_start(t_args args, t_philo *philo);
 int		philo_eat(t_args args, t_philo *philo);
 int		philo_sleep(t_args args, t_philo *philo);
