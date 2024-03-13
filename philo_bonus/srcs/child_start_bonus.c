@@ -29,33 +29,34 @@ void	child_loop(t_args args, t_philo *philo)
 void	*death_monitor(void *arg)
 {
 	t_philo	*philo;
-	t_philo	*philos;
 
 	philo = *(t_philo **) arg;
 	sem_wait(philo->sems.dead);
 	sem_post(philo->sems.dead);
-	philos = philo;
-	philos -= philo->num;
 	sem_close(philo->sems.forks);
 	sem_close(philo->sems.full);
 	sem_close(philo->sems.dead);
 	sem_post(philo->sems.write);
 	sem_close(philo->sems.write);
-	free(philos);
 	exit (0);
 }
 
-int	child_start(t_args args, t_philo *philo)
+int	child_start(t_args args, int i)
 {
 	pthread_t	monitor;
+	t_philo		philo;
 
-	philo->sems.forks = sem_open("/forks", O_RDONLY);
-	philo->sems.full = sem_open("/full", O_RDONLY);
-	philo->sems.dead = sem_open("/dead", O_RDONLY);
-	philo->sems.write = sem_open("/write", O_RDONLY);
+	philo.num = i;
+	philo.eat_count = 0;
+	philo.last_eat_time.tv_sec = args.start_time.tv_sec;
+	philo.last_eat_time.tv_usec = args.start_time.tv_usec;
+	philo.sems.forks = sem_open("/forks", O_RDONLY);
+	philo.sems.full = sem_open("/full", O_RDONLY);
+	philo.sems.dead = sem_open("/dead", O_RDONLY);
+	philo.sems.write = sem_open("/write", O_RDONLY);
 	pthread_create(&monitor, NULL, death_monitor, &philo);
-	set_philo_state(args, philo, THINK);
-	child_loop(args, philo);
+	set_philo_state(args, &philo, THINK);
+	child_loop(args, &philo);
 	pthread_join(monitor, NULL);
 	exit (0);
 }

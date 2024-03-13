@@ -17,6 +17,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 
 # include <sys/stat.h>
 # include <semaphore.h>
@@ -57,7 +59,7 @@ typedef struct s_philo
 	t_timeval	last_eat_time;
 	t_state		state;
 	t_sems		sems;
-	int			exit;
+	int			*exit;
 }	t_philo;
 
 int		prepare_args(t_args	*args, int argc, char **argv);
@@ -69,8 +71,8 @@ void	unlink_all(void);
 void	close_all(t_sems *sems);
 void	free_all(t_philo *philos, t_sems *sems);
 
-int		start_processes(t_args args, t_philo *philos);
-int		child_start(t_args args, t_philo *philo);
+int		start_processes(t_args args);
+int		child_start(t_args args, int i);
 int		philo_eat(t_args args, t_philo *philo);
 int		philo_sleep(t_args args, t_philo *philo);
 int		pick_up_forks(t_args args, t_philo *philo);

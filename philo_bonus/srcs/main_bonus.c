@@ -35,23 +35,16 @@ void	close_all(t_sems *sems)
 int	main(int argc, char **argv)
 {
 	t_args	args;
-	t_philo	*philos;
 	t_sems	sems;
 	int		ret;
 
 	if (prepare_args(&args, argc, argv) == -1)
 		return (1);
-	if (prepare_philosophers(&philos, args) == -1)
-		return (1);
 	if (prepare_semaphores(&sems, args.philo_count) == -1)
-	{
-		free(philos);
 		return (1);
-	}
-	ret = start_processes(args, philos);
+	ret = start_processes(args);
 	unlink_all();
 	close_all(&sems);
-	free(philos);
 	if (ret == -1)
 		return (1);
 	return (0);

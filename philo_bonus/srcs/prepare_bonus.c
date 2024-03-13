@@ -39,26 +39,6 @@ int	prepare_args(t_args	*args, int argc, char **argv)
 	return (1);
 }
 
-int	prepare_philosophers(t_philo **philos, t_args args)
-{
-	int	i;
-
-	*philos = malloc(args.philo_count * sizeof(t_philo));
-	if (*philos == 0)
-		return (-1);
-	i = 0;
-	while (i < args.philo_count)
-	{
-		(*philos)[i].num = i;
-		(*philos)[i].eat_count = 0;
-		(*philos)[i].state = THINK;
-		(*philos)[i].last_eat_time.tv_sec = args.start_time.tv_sec;
-		(*philos)[i].last_eat_time.tv_usec = args.start_time.tv_usec;
-		i++;
-	}
-	return (1);
-}
-
 int	sem_error(t_sems *sems)
 {
 	printf("Error: failed to open semaphore");

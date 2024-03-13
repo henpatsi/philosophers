@@ -12,7 +12,7 @@
 
 #include "philosophers_bonus.h"
 
-int	create_child(t_args args, t_philo *philos, int i)
+int	create_child(t_args args, int i)
 {
 	pid_t	process_id;
 
@@ -24,7 +24,7 @@ int	create_child(t_args args, t_philo *philos, int i)
 	}
 	if (process_id == 0)
 	{
-		child_start(args, &philos[i]);
+		child_start(args, i);
 		return (-1);
 	}
 	return (process_id);
@@ -71,7 +71,7 @@ int	monitor_start(t_args args, pid_t *process_ids)
 	return (1);
 }
 
-int	start_processes(t_args args, t_philo *philos)
+int	start_processes(t_args args)
 {
 	pid_t	*process_ids;
 	int		i;
@@ -83,7 +83,7 @@ int	start_processes(t_args args, t_philo *philos)
 	i = 0;
 	while (i < args.philo_count)
 	{
-		process_ids[i] = create_child(args, philos, i);
+		process_ids[i] = create_child(args, i);
 		if (process_ids[i] == -1)
 		{
 			free(process_ids);
