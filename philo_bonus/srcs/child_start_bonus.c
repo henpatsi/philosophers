@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 10:24:01 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 16:04:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	*death_monitor(void *arg)
 {
 	t_philo	*philo;
 
-	philo = *(t_philo **) arg;
+	philo = (t_philo *) arg;
 	sem_wait(philo->sems.dead);
 	sem_post(philo->sems.dead);
 	sem_close(philo->sems.forks);
