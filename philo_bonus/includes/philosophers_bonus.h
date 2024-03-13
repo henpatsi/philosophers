@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 09:39:51 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:18:49 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int		prepare_args(t_args	*args, int argc, char **argv);
 int		prepare_philosophers(t_philo **philos, t_args args);
 int		prepare_semaphores(t_sems *sems, int count);
 int		extract_arg(int	*dst, const char *str);
+
+void	unlink_all(void);
+void	close_all(t_sems *sems);
 void	free_all(t_philo *philos, t_sems *sems);
 
 int		start_processes(t_args args, t_philo *philos);

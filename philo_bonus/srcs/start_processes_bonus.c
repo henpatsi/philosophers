@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 09:55:40 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:20:54 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	*full_monitor(void	*arg)
 		sem_wait(full_sem);
 		i++;
 	}
-	sem_wait(write_sem);
 	sem_post(dead_sem);
 	sem_close(full_sem);
 	sem_close(dead_sem);

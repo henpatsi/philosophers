@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 08:49:26 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 09:53:23 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:21:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	philo_die(t_args args, t_philo *philo)
 		put_down_forks(philo);
 	sem_wait(philo->sems.write);
 	printf("%ld %d died\n", get_time_passed(args.start_time), philo->num + 1);
+	sem_post(philo->sems.write);
 	return (-1);
 }
 

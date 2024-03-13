@@ -6,23 +6,30 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 09:47:27 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 08:45:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:18:31 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-void	free_all(t_philo *philos, t_sems *sems)
+void	unlink_all(void)
 {
 	sem_unlink("/forks");
 	sem_unlink("/full");
 	sem_unlink("/dead");
 	sem_unlink("/write");
-	sem_close(sems->forks);
-	sem_close(sems->full);
-	sem_close(sems->dead);
-	sem_close(sems->write);
-	free(philos);
+}
+
+void	close_all(t_sems *sems)
+{
+	if (sems->forks != 0)
+		sem_close(sems->forks);
+	if (sems->full != 0)
+		sem_close(sems->full);
+	if (sems->dead != 0)
+		sem_close(sems->dead);
+	if (sems->write != 0)
+		sem_close(sems->write);
 }
 
 int	main(int argc, char **argv)
@@ -42,7 +49,9 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	ret = start_processes(args, philos);
-	free_all(philos, &sems);
+	unlink_all();
+	close_all(&sems);
+	free(philos);
 	if (ret == -1)
 		return (1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 09:56:28 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:24:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	*death_monitor(void *arg)
 	sem_post(philo->sems.dead);
 	philos = philo;
 	philos -= philo->num;
+	sem_close(philo->sems.forks);
+	sem_close(philo->sems.full);
+	sem_close(philo->sems.dead);
+	sem_post(philo->sems.write);
+	sem_close(philo->sems.write);
 	free(philos);
 	exit (0);
 }
