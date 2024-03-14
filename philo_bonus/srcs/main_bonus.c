@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 09:47:27 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 10:18:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/14 11:46:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (prepare_semaphores(&sems, args.philo_count) == -1)
 		return (1);
-	ret = start_processes(args);
+	ret = start_processes(args, sems);
 	unlink_all();
 	close_all(&sems);
 	if (ret == -1)

@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 10:20:54 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/14 13:31:33 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
 
-int	create_child(t_args args, int i)
+int	create_child(t_args args, int i, t_sems sems, pid_t	*process_ids)
 {
 	pid_t	process_id;
 
@@ -24,6 +24,8 @@ int	create_child(t_args args, int i)
 	}
 	if (process_id == 0)
 	{
+		close_all(&sems);
+		free(process_ids);
 		child_start(args, i);
 		return (-1);
 	}
@@ -67,11 +69,11 @@ int	monitor_start(t_args args, pid_t *process_ids)
 		waitpid(process_ids[i], NULL, 0);
 		i++;
 	}
-	pthread_detach(monitor);
+	pthread_join(monitor, NULL);
 	return (1);
 }
 
-int	start_processes(t_args args)
+int	start_processes(t_args args, t_sems sems)
 {
 	pid_t	*process_ids;
 	int		i;
@@ -83,7 +85,7 @@ int	start_processes(t_args args)
 	i = 0;
 	while (i < args.philo_count)
 	{
-		process_ids[i] = create_child(args, i);
+		process_ids[i] = create_child(args, i, sems, process_ids);
 		if (process_ids[i] == -1)
 		{
 			free(process_ids);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/13 10:18:49 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/14 11:51:29 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_sems
 	sem_t	*full;
 	sem_t	*dead;
 	sem_t	*write;
+	sem_t	*exit;
 }	t_sems;
 
 typedef struct s_args
@@ -59,7 +60,7 @@ typedef struct s_philo
 	t_timeval	last_eat_time;
 	t_state		state;
 	t_sems		sems;
-	int			*exit;
+	int			exit;
 }	t_philo;
 
 int		prepare_args(t_args	*args, int argc, char **argv);
@@ -71,13 +72,16 @@ void	unlink_all(void);
 void	close_all(t_sems *sems);
 void	free_all(t_philo *philos, t_sems *sems);
 
-int		start_processes(t_args args);
+int		start_processes(t_args args, t_sems sems);
 int		child_start(t_args args, int i);
 int		philo_eat(t_args args, t_philo *philo);
 int		philo_sleep(t_args args, t_philo *philo);
 int		pick_up_forks(t_args args, t_philo *philo);
 int		put_down_forks(t_philo *philo);
+
 int		set_philo_state(t_args args, t_philo *philo, t_state state);
+void	set_exit_state(t_philo *philo);
+int		get_exit_state(t_philo *philo);
 
 int		philo_die(t_args args, t_philo *philo);
 long	get_time_passed(t_timeval start_time);
