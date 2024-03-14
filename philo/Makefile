@@ -6,7 +6,7 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/03/05 12:57:09 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/03/14 17:46:15 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,9 @@ OBJECTS = $(SOURCES:.c=.o)
 
 INCLUDES = -I ./includes/
 
-DEBUG = -g -fsanitize=thread
+DEBUG = -g
 
-CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES)
+CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES) $(DEBUG)
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 13:11:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/14 17:39:20 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,21 @@ int	put_down_forks(t_philo *philo)
 	return (1);
 }
 
+int	has_time_to_eat(t_args args, t_philo *philo)
+{
+	if (philo->eat_count == 0 && philo->num % 2 != 0)
+		better_sleep(args, philo, args.eat_time);
+	if (args.philo_count == 1 || args.philo_count % 2 == 0)
+		return (1);
+	if (get_time_passed(philo->last_eat_time) + args.eat_time > args.die_time)
+		return (0);
+	return (1);
+}
+
 int	pick_up_forks(t_args args, t_philo *philo)
 {
+	if (!has_time_to_eat(args, philo))
+		return (better_sleep(args, philo, args.eat_time));
 	sem_wait(philo->sems.forks);
 	if (print_fork(args, philo) == -1)
 	{

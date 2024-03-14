@@ -29,12 +29,21 @@ test_error()
 
 test_philo_death()
 {
-	DEATH_COUNT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "died" | wc -l )
+	DEATH=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "died" )
+	DEATH_COUNT=$( echo $DEATH | wc -l )
+	DIED_AT=$( echo $DEATH | awk '{print $1}' )
 	if [ $DEATH_COUNT -eq 1 ]
 	then
-		echo -e ${GREEN}"$DEATH_TIME: [OK]"${NC}
+		if [ $DIED_AT -gt $DEATH_TIME ] && [ $DIED_AT -lt $(( $DEATH_TIME + 10 )) ]
+		then
+			echo -e ${GREEN}"$DEATH_TIME: [OK]"${NC}
+		else
+			echo -e ${RED}"$DEATH_TIME: [KO]"${NC}
+			echo "died at $DIED_AT"
+		fi
 	else
 		echo -e ${RED}"$DEATH_TIME: [KO]"${NC}
+		echo "more than one philosopher died"
 	fi
 }
 
