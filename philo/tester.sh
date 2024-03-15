@@ -30,8 +30,8 @@ test_error()
 test_philo_death()
 {
 	DEATH=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "died" )
-	DEATH_COUNT=$( echo $DEATH | wc -l )
-	DIED_AT=$( echo $DEATH | awk '{print $1}' )
+	DEATH_COUNT=$( echo "$DEATH" | wc -l )
+	DIED_AT=$( echo "$DEATH" | awk '{print $1}' )
 	if [ $DEATH_COUNT -eq 1 ]
 	then
 		if [ $DIED_AT -gt $DEATH_TIME ] && [ $DIED_AT -lt $(( $DEATH_TIME + 10 )) ]
@@ -49,13 +49,22 @@ test_philo_death()
 
 test_philo_count()
 {
-	TIMES_EATEN=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep "is eating" | wc -l )
+	OUT=$( $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT | grep 'is eating' )
+	TIMES_EATEN=$( echo "$OUT" | grep "is eating" | wc -l )
+	DEATH_COUNT=$( echo "$OUT" | grep "died" | wc -l )
 	TIMES_EATEN_PER=$(( $TIMES_EATEN / $PHILO_COUNT ))
-	if [ $TIMES_EATEN_PER -ge $EAT_LIMIT ] || [ $PHILO_COUNT -eq 1 ]
+	if [ $DEATH_COUNT -ge 1 ]
 	then
-		echo -e ${GREEN}"$PHILO_COUNT: [OK]"${NC}
-	else
 		echo -e ${RED}"$PHILO_COUNT: [KO]"${NC}
+		echo "$OUT" | grep 'died'
+	else
+		if [ $TIMES_EATEN_PER -ge $EAT_LIMIT ] || [ $PHILO_COUNT -eq 1 ]
+		then
+			echo -e ${GREEN}"$PHILO_COUNT: [OK]"${NC}
+		else
+			echo -e ${RED}"$PHILO_COUNT: [KO]"${NC}
+			echo "times eaten per = $TIMES_EATEN_PER"
+		fi
 	fi
 }
 

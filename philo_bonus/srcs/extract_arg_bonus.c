@@ -6,16 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:28:56 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/04 15:04:19 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 10:45:20 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
-
-int	ft_isspace(int c)
-{
-	return ((c >= 9 && c <= 13) || c == 32);
-}
 
 int	ft_isdigit(int c)
 {
@@ -31,18 +26,23 @@ int	extract_error(char	*message)
 int	extract_arg(int	*dst, const char *str)
 {
 	int	num;
+	int	lastnum;
 
 	if (*str == 0)
 		return (extract_error("empty arg"));
 	num = 0;
-	while (*str != 0 && ft_isdigit(*str))
+	lastnum = 0;
+	while (*str != 0)
 	{
+		if (!ft_isdigit(*str) && *str != '-')
+			return (extract_error("arguments should only contain digits"));
 		num *= 10;
 		num += (*str - '0');
+		if (num <= lastnum)
+			return (extract_error("argument must be a positive integer"));
+		lastnum = num;
 		str++;
 	}
-	if (*str != 0)
-		return (extract_error("arguments should only contain digits"));
 	if (num == 0)
 		return (extract_error("arguments cannot be 0"));
 	*dst = num;
