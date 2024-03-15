@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 11:44:38 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:12:15 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int			prepare_inputs(t_thread_input **inputs, t_args args,
 				t_mutexes mutexes, t_philo *philos);
 
 int			initialize_mutex_list(t_mutex **dst, t_args args);
-void		destroy_mutex_list(t_mutex **dst, t_args args);
+void		destroy_mutex_list(t_mutex **dst, int count);
 void		destroy_all_mutex(t_mutexes *mutexes, t_args args);
 
 int			start_threads(t_args args, t_mutexes mutexes,

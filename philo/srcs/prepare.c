@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 12:04:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:12:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	prepare_mutexes(t_mutexes *mutexes, t_args args)
 		return (-1);
 	if (initialize_mutex_list(&mutexes->philos, args) == -1)
 	{
-		destroy_mutex_list(&mutexes->forks, args);
+		destroy_mutex_list(&mutexes->forks, args.philo_count);
 		return (-1);
 	}
 	return (1);

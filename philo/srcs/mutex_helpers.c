@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:49:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 11:40:20 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:12:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	initialize_mutex_list(t_mutex **dst, t_args args)
 		if (pthread_mutex_init(&(*dst)[i], NULL) == -1)
 		{
 			printf("Error initiating mutex\n");
-			free(dst);
+			destroy_mutex_list(dst, i);
 			return (-1);
 		}
 		i++;
@@ -33,12 +33,12 @@ int	initialize_mutex_list(t_mutex **dst, t_args args)
 	return (1);
 }
 
-void	destroy_mutex_list(t_mutex **dst, t_args args)
+void	destroy_mutex_list(t_mutex **dst, int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < args.philo_count)
+	while (i < count)
 	{
 		pthread_mutex_destroy(&(*dst)[i]);
 		i++;
@@ -48,6 +48,6 @@ void	destroy_mutex_list(t_mutex **dst, t_args args)
 
 void	destroy_all_mutex(t_mutexes *mutexes, t_args args)
 {
-	destroy_mutex_list(&mutexes->forks, args);
-	destroy_mutex_list(&mutexes->philos, args);
+	destroy_mutex_list(&mutexes->forks, args.philo_count);
+	destroy_mutex_list(&mutexes->philos, args.philo_count);
 }
