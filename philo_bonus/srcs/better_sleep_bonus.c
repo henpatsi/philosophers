@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 08:49:26 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 13:47:30 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 10:13:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 int	philo_die(t_args args, t_philo *philo)
 {
 	sem_wait(philo->sems.write);
-	if (!get_exit_state(philo))
-		printf("%ld %d died\n", get_time_passed(args.start_time), philo->num + 1);
+	if (!get_exit_state(philo->exit_state, philo->sems.exit))
+		printf("%ld %d died\n", get_time_passed(args.start_time),
+			philo->num + 1);
 	sem_post(philo->sems.dead);
 	if (philo->state == EAT)
 		put_down_forks(philo);
@@ -46,7 +47,7 @@ int	better_sleep(t_args args, t_philo *philo, long sleep_time)
 	while (get_time_passed(sleep_start) < sleep_time)
 	{
 		usleep(200);
-		if (get_exit_state(philo))
+		if (get_exit_state(philo->exit_state, philo->sems.exit))
 		{
 			if (philo->state == EAT)
 				put_down_forks(philo);

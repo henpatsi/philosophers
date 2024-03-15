@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 17:39:20 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 09:37:32 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	print_fork(t_args args, t_philo *philo)
 	if (ms == -1)
 		return (-1);
 	sem_wait(philo->sems.write);
-	if (!get_exit_state(philo))
+	if (!get_exit_state(philo->exit_state, philo->sems.exit))
 		printf("%ld %d %s\n", ms, philo->num + 1, "has taken a fork");
 	sem_post(philo->sems.write);
 	return (1);

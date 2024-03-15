@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 11:51:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 10:12:27 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,16 @@ typedef struct s_philo
 	t_timeval	last_eat_time;
 	t_state		state;
 	t_sems		sems;
-	int			exit;
+	int			*exit_state;
 }	t_philo;
+
+typedef struct s_monitor_info
+{
+	sem_t	*exit_sem;
+	sem_t	*dead_sem;
+	sem_t	*full_sem;
+	int		*exit_state;
+}	t_monitor_info;
 
 int		prepare_args(t_args	*args, int argc, char **argv);
 int		prepare_philosophers(t_philo **philos, t_args args);
@@ -80,8 +88,7 @@ int		pick_up_forks(t_args args, t_philo *philo);
 int		put_down_forks(t_philo *philo);
 
 int		set_philo_state(t_args args, t_philo *philo, t_state state);
-void	set_exit_state(t_philo *philo);
-int		get_exit_state(t_philo *philo);
+int		get_exit_state(int	*exit_state, sem_t *exit_sem);
 
 int		philo_die(t_args args, t_philo *philo);
 long	get_time_passed(t_timeval start_time);

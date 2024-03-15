@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 13:51:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 10:14:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	child_loop(t_args args, t_philo *philo)
 			break ;
 		if (philo_eat(args, philo) == -1)
 			break ;
-		if (philo_sleep(args, philo) == -1 || get_exit_state(philo))
+		if (philo_sleep(args, philo) == -1)
 			break ;
 		set_philo_state(args, philo, THINK);
 	}
@@ -28,21 +28,29 @@ void	child_loop(t_args args, t_philo *philo)
 
 void	*death_monitor(void *arg)
 {
-	t_philo	*philo;
+	t_monitor_info	*info;
 
-	philo = (t_philo *) arg;
-	sem_wait(philo->sems.dead);
-	sem_post(philo->sems.dead);
-	set_exit_state(philo);
-	sem_post(philo->sems.full);
+	info = (t_monitor_info *) arg;
+	info->dead_sem = sem_open("/dead", O_RDONLY);
+	info->exit_sem = sem_open("/exit", O_RDONLY);
+	info->full_sem = sem_open("/full", O_RDONLY);
+	sem_wait(info->dead_sem);
+	sem_post(info->dead_sem);
+	sem_wait(info->exit_sem);
+	*info->exit_state = 1;
+	sem_post(info->exit_sem);
+	sem_post(info->full_sem);
+	sem_close(info->dead_sem);
+	sem_close(info->exit_sem);
+	sem_close(info->full_sem);
 	return (0);
 }
 
-int	prepare_philo(t_philo *philo, t_args args, int i)
+int	prepare_philo(t_philo *philo, t_args args, int i, int *exit_state)
 {
 	philo->num = i;
 	philo->eat_count = 0;
-	philo->exit = 0;
+	philo->exit_state = exit_state;
 	philo->last_eat_time.tv_sec = args.start_time.tv_sec;
 	philo->last_eat_time.tv_usec = args.start_time.tv_usec;
 	philo->sems.forks = sem_open("/forks", O_RDONLY);
@@ -56,11 +64,15 @@ int	prepare_philo(t_philo *philo, t_args args, int i)
 
 int	child_start(t_args args, int i)
 {
-	pthread_t	monitor;
-	t_philo		philo;
+	pthread_t		monitor;
+	t_monitor_info	monitor_info;
+	t_philo			philo;
+	int				exit_state;
 
-	prepare_philo(&philo, args, i);
-	pthread_create(&monitor, NULL, death_monitor, &philo);
+	exit_state = 0;
+	prepare_philo(&philo, args, i, &exit_state);
+	monitor_info.exit_state = &exit_state;
+	pthread_create(&monitor, NULL, death_monitor, &monitor_info);
 	set_philo_state(args, &philo, THINK);
 	child_loop(args, &philo);
 	pthread_join(monitor, NULL);

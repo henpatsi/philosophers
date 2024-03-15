@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_philo_bonus.c                                  :+:      :+:    :+:   */
+/*   state_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:37:38 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 12:56:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 10:12:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_state(t_args args, t_philo philo)
 int	set_philo_state(t_args args, t_philo *philo, t_state state)
 {
 	philo->state = state;
-	if (get_exit_state(philo))
+	if (get_exit_state(philo->exit_state, philo->sems.exit))
 	{
 		if (philo->state == EAT)
 			put_down_forks(philo);
@@ -46,19 +46,12 @@ int	set_philo_state(t_args args, t_philo *philo, t_state state)
 	return (1);
 }
 
-void	set_exit_state(t_philo *philo)
-{
-	sem_wait(philo->sems.exit);
-	philo->exit = 1;
-	sem_post(philo->sems.exit);
-}
-
-int	get_exit_state(t_philo *philo)
+int	get_exit_state(int	*exit_state, sem_t *exit_sem)
 {
 	int	state;
 
-	sem_wait(philo->sems.exit);
-	state = philo->exit;
-	sem_post(philo->sems.exit);
+	sem_wait(exit_sem);
+	state = *exit_state;
+	sem_post(exit_sem);
 	return (state);
 }
