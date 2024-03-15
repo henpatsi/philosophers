@@ -6,31 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 09:47:27 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 11:46:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:19:11 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
-
-void	unlink_all(void)
-{
-	sem_unlink("/forks");
-	sem_unlink("/full");
-	sem_unlink("/dead");
-	sem_unlink("/write");
-}
-
-void	close_all(t_sems *sems)
-{
-	if (sems->forks != 0)
-		sem_close(sems->forks);
-	if (sems->full != 0)
-		sem_close(sems->full);
-	if (sems->dead != 0)
-		sem_close(sems->dead);
-	if (sems->write != 0)
-		sem_close(sems->write);
-}
 
 int	main(int argc, char **argv)
 {

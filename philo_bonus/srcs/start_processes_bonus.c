@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 13:31:33 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:39:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	create_child(t_args args, int i, t_sems sems, pid_t	*process_ids)
 	process_id = fork();
 	if (process_id == -1)
 	{
-		printf("fork %d failed\n", i);
+		printf("Error: fork %d failed\n", i);
 		return (-1);
 	}
 	if (process_id == 0)
@@ -36,24 +36,25 @@ void	*full_monitor(void	*arg)
 {
 	int		i;
 	int		philo_count;
-	sem_t	*full_sem;
-	sem_t	*dead_sem;
-	sem_t	*write_sem;
+	t_sems	sems;
 
 	philo_count = *(int *) arg;
-	full_sem = sem_open("/full", O_RDONLY);
-	dead_sem = sem_open("/dead", O_RDONLY);
-	write_sem = sem_open("/write", O_RDONLY);
-	i = 0;
-	while (i < philo_count)
+	sems.full = sem_open("/full", O_RDONLY);
+	sems.dead = sem_open("/dead", O_RDONLY);
+	sems.exit = 0;
+	sems.forks = 0;
+	sems.write = 0;
+	if (sems.full == SEM_FAILED || sems.dead == SEM_FAILED)
 	{
-		sem_wait(full_sem);
-		i++;
+		printf("Error: sem open failed\n");
+		close_all(&sems);
+		return (0);
 	}
-	sem_post(dead_sem);
-	sem_close(full_sem);
-	sem_close(dead_sem);
-	sem_close(write_sem);
+	i = 0;
+	while (i++ < philo_count)
+		sem_wait(sems.full);
+	sem_post(sems.dead);
+	close_all(&sems);
 	return (0);
 }
 
@@ -62,7 +63,11 @@ int	monitor_start(t_args args, pid_t *process_ids)
 	int			i;
 	pthread_t	monitor;
 
-	pthread_create(&monitor, NULL, full_monitor, &args.philo_count);
+	if (pthread_create(&monitor, NULL, full_monitor, &args.philo_count) == -1)
+	{
+		printf("Error: failed to create thread\n");
+		return (-1);
+	}
 	i = 0;
 	while (i < args.philo_count)
 	{
@@ -88,12 +93,15 @@ int	start_processes(t_args args, t_sems sems)
 		process_ids[i] = create_child(args, i, sems, process_ids);
 		if (process_ids[i] == -1)
 		{
+			sem_post(sems.dead);
 			free(process_ids);
 			return (-1);
 		}
 		i++;
 	}
 	ret = monitor_start(args, process_ids);
+	if (ret == -1)
+		sem_post(sems.dead);
 	free(process_ids);
 	return (ret);
 }

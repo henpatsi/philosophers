@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 11:54:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:33:39 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,26 @@ int	prepare_args(t_args	*args, int argc, char **argv)
 	return (1);
 }
 
+void	unlink_all(void)
+{
+	sem_unlink("/forks");
+	sem_unlink("/full");
+	sem_unlink("/dead");
+	sem_unlink("/write");
+}
+
+void	close_all(t_sems *sems)
+{
+	if (sems->forks != 0 && sems->forks != SEM_FAILED)
+		sem_close(sems->forks);
+	if (sems->full != 0 && sems->full != SEM_FAILED)
+		sem_close(sems->full);
+	if (sems->dead != 0 && sems->dead != SEM_FAILED)
+		sem_close(sems->dead);
+	if (sems->write != 0 && sems->write != SEM_FAILED)
+		sem_close(sems->write);
+}
+
 int	sem_error(t_sems *sems)
 {
 	printf("Error: failed to open semaphore");
@@ -49,6 +69,10 @@ int	sem_error(t_sems *sems)
 
 int	prepare_semaphores(t_sems *sems, int count)
 {
+	sems->forks = 0;
+	sems->full = 0;
+	sems->dead = 0;
+	sems->write = 0;
 	unlink_all();
 	sems->forks = sem_open("/forks", O_CREAT, 0644, count);
 	if (sems->forks == SEM_FAILED)
