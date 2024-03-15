@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:37:38 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 12:55:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:07:38 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	print_state(t_thread_input input)
 	if (get_philo_exiting(input.philo, input.philo_mutex))
 		return ;
 	ms = get_time_passed(input.args.start_time);
-	if (ms == -1)
-		return ;
 	if (input.state == EAT)
 		state_str = "is eating";
 	else if (input.state == SLEEP)

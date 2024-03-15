@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 09:34:25 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 12:40:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 11:44:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	philo_has_died(t_args args, t_philo *philo, t_mutex *philo_mutex)
 	return (0);
 }
 
-int	set_all_philos_exiting(t_philo *philos, t_mutex *philo_mutexes,
+void	set_all_philos_exiting(t_philo *philos, t_mutex *philo_mutexes,
 		pthread_t *threads, int count)
 {
 	int	i;
@@ -39,7 +39,6 @@ int	set_all_philos_exiting(t_philo *philos, t_mutex *philo_mutexes,
 		pthread_join(threads[i], NULL);
 		i++;
 	}
-	return (1);
 }
 
 int	all_finished(t_args args, t_philo *philos,
@@ -80,7 +79,7 @@ int	philo_dead(t_args args, t_philo *philos,
 	return (0);
 }
 
-int	monitor_start(t_args args, t_mutex *philo_mutexes,
+void	monitor_start(t_args args, t_mutex *philo_mutexes,
 		t_philo *philos, pthread_t *threads)
 {
 	while (1)
@@ -94,5 +93,4 @@ int	monitor_start(t_args args, t_mutex *philo_mutexes,
 		if (philo_dead(args, philos, philo_mutexes, threads))
 			break ;
 	}
-	return (0);
 }

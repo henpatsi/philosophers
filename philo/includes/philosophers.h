@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 13:11:56 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 11:44:38 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ void		destroy_all_mutex(t_mutexes *mutexes, t_args args);
 int			start_threads(t_args args, t_mutexes mutexes,
 				t_philo *philos, t_thread_input *inputs);
 void		*philo_start(void *arg);
-int			monitor_start(t_args args, t_mutex *philo_mutexes,
+void		monitor_start(t_args args, t_mutex *philo_mutexes,
 				t_philo *philos, pthread_t *threads);
+void		set_all_philos_exiting(t_philo *philos, t_mutex *philo_mutexes,
+				pthread_t *threads, int count);
 
 int			philo_eat(t_thread_input input);
 int			philo_sleep(t_thread_input input);

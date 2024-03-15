@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 14:49:10 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/05 12:53:55 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:06:57 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	print_fork(t_thread_input input)
 	long	ms;
 
 	ms = get_time_passed(input.args.start_time);
-	if (ms == -1)
-		return (-1);
 	if (!get_philo_exiting(input.philo, input.philo_mutex))
 		printf("%ld %d %s\n", ms, input.num + 1, "has taken a fork");
 	return (1);
@@ -52,8 +50,7 @@ int	pick_up_forks(t_thread_input input)
 	pthread_mutex_lock(input.left_fork);
 	if (get_philo_exiting(input.philo, input.philo_mutex))
 	{
-		pthread_mutex_unlock(input.right_fork);
-		pthread_mutex_unlock(input.left_fork);
+		put_down_forks(input);
 		return (-1);
 	}
 	print_fork(input);
