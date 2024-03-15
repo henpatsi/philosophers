@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 11:37:38 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 10:12:40 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:54:36 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	print_state(t_args args, t_philo philo)
 	char	*state_str;
 
 	ms = get_time_passed(args.start_time);
-	if (ms == -1)
-		return ;
 	if (philo.state == EAT)
 		state_str = "is eating";
 	else if (philo.state == SLEEP)

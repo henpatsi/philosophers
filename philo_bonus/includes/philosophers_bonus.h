@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 10:12:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:51:46 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ typedef struct s_philo
 
 typedef struct s_monitor_info
 {
-	sem_t	*exit_sem;
-	sem_t	*dead_sem;
-	sem_t	*full_sem;
+	t_sems	sems;
 	int		*exit_state;
 }	t_monitor_info;
 

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 10:14:04 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:53:41 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,25 @@ void	*death_monitor(void *arg)
 	t_monitor_info	*info;
 
 	info = (t_monitor_info *) arg;
-	info->dead_sem = sem_open("/dead", O_RDONLY);
-	info->exit_sem = sem_open("/exit", O_RDONLY);
-	info->full_sem = sem_open("/full", O_RDONLY);
-	sem_wait(info->dead_sem);
-	sem_post(info->dead_sem);
-	sem_wait(info->exit_sem);
+	info->sems.dead = sem_open("/dead", O_RDONLY);
+	info->sems.exit = sem_open("/exit", O_RDONLY);
+	info->sems.full = sem_open("/full", O_RDONLY);
+	info->sems.forks = 0;
+	info->sems.write = 0;
+	if (info->sems.dead == SEM_FAILED || info->sems.exit == SEM_FAILED
+		|| info->sems.full == SEM_FAILED)
+	{
+		printf("Error: sem open failed\n");
+		close_all(&info->sems);
+		return (0);
+	}
+	sem_wait(info->sems.dead);
+	sem_post(info->sems.dead);
+	sem_wait(info->sems.exit);
 	*info->exit_state = 1;
-	sem_post(info->exit_sem);
-	sem_post(info->full_sem);
-	sem_close(info->dead_sem);
-	sem_close(info->exit_sem);
-	sem_close(info->full_sem);
+	sem_post(info->sems.exit);
+	sem_post(info->sems.full);
+	close_all(&info->sems);
 	return (0);
 }
 
@@ -59,7 +66,21 @@ int	prepare_philo(t_philo *philo, t_args args, int i, int *exit_state)
 	philo->sems.write = sem_open("/write", O_RDONLY);
 	sem_unlink("/exit");
 	philo->sems.exit = sem_open("/exit", O_CREAT, 0644, 1);
+	if (philo->sems.forks == SEM_FAILED || philo->sems.full == SEM_FAILED
+		|| philo->sems.dead == SEM_FAILED || philo->sems.write == SEM_FAILED
+		|| philo->sems.exit == SEM_FAILED)
+		return (-1);
 	return (1);
+}
+
+void	close_and_exit(t_philo *philo, char *error_message)
+{
+	if (error_message)
+		printf("Error: %s\n", error_message);
+	close_all(&philo->sems);
+	if (philo->sems.exit != SEM_FAILED)
+		sem_close(philo->sems.exit);
+	exit(0);
 }
 
 int	child_start(t_args args, int i)
@@ -70,13 +91,14 @@ int	child_start(t_args args, int i)
 	int				exit_state;
 
 	exit_state = 0;
-	prepare_philo(&philo, args, i, &exit_state);
+	if (prepare_philo(&philo, args, i, &exit_state) == -1)
+		close_and_exit(&philo, "sem open failed");
 	monitor_info.exit_state = &exit_state;
-	pthread_create(&monitor, NULL, death_monitor, &monitor_info);
+	if (pthread_create(&monitor, NULL, death_monitor, &monitor_info) == -1)
+		close_and_exit(&philo, "thread create failed");
 	set_philo_state(args, &philo, THINK);
 	child_loop(args, &philo);
 	pthread_join(monitor, NULL);
-	close_all(&philo.sems);
-	sem_close(philo.sems.exit);
+	close_and_exit(&philo, 0);
 	exit (0);
 }

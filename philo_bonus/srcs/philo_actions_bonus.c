@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 14:02:07 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/14 12:48:30 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/15 12:56:37 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	philo_eat(t_args args, t_philo *philo)
 {
 	set_philo_state(args, philo, EAT);
-	gettimeofday(&philo->last_eat_time, NULL);
+	if (gettimeofday(&philo->last_eat_time, NULL) == -1)
+		return (-1);
 	if (better_sleep(args, philo, args.eat_time) == -1)
 	{
 		put_down_forks(philo);
