@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 12:39:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/18 12:23:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	*full_monitor(void	*arg)
 	sems.write = 0;
 	if (sems.full == SEM_FAILED || sems.dead == SEM_FAILED)
 	{
-		printf("Error: sem open failed\n");
+		printf("Error: monitor sem open failed\n");
 		close_all(&sems);
 		return (0);
 	}

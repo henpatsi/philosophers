@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:29:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 12:33:39 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/18 12:23:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	unlink_all(void)
 	sem_unlink("/full");
 	sem_unlink("/dead");
 	sem_unlink("/write");
+	sem_unlink("/exit");
 }
 
 void	close_all(t_sems *sems)

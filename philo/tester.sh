@@ -11,9 +11,18 @@ CYAN='\033[0;36m'
 
 OUTFILE=out
 
+LEAKS_ON=1
+
 test_error()
 {
-	OUT=$( $ARG )
+	if [ $LEAKS_ON -eq 1 ]
+	then
+		OUT=$( valgrind $ARG 2> leaks.log )
+		cat leaks.log | grep "at exit"
+		rm -rf leaks.log
+	else
+		OUT=$( $ARG )
+	fi
 	echo "$OUT" > $OUTFILE
 	cat $OUTFILE
 	OUT_LEN=$( cat $OUTFILE | wc -l )
@@ -45,6 +54,7 @@ test_philo_death()
 		echo -e ${RED}"$DEATH_TIME: [KO]"${NC}
 		echo "more than one philosopher died"
 	fi
+	test_leaks
 }
 
 test_philo_count()
@@ -66,6 +76,7 @@ test_philo_count()
 			echo "times eaten per = $TIMES_EATEN_PER"
 		fi
 	fi
+	test_leaks
 }
 
 test_times_eaten()
@@ -78,8 +89,19 @@ test_times_eaten()
 	else
 		echo -e ${RED}"$TIMES_EATEN_PER: [KO]"${NC}
 	fi
+	test_leaks
 }
 
+test_leaks()
+{
+	if [ $LEAKS_ON -eq 1 ]
+	then
+		valgrind $PHILO $PHILO_COUNT $DEATH_TIME $EAT_TIME $SLEEP_TIME $EAT_LIMIT 1> trash.log 2> leaks.log
+		cat leaks.log | grep "at exit"
+		rm -rf trash.log
+		rm -rf leaks.log
+	fi
+}
 
 
 echo -e ${CYAN}"--- TEST INVALID ARGS ---"${NC}

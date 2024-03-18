@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 12:53:41 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/18 12:23:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	*death_monitor(void *arg)
 	if (info->sems.dead == SEM_FAILED || info->sems.exit == SEM_FAILED
 		|| info->sems.full == SEM_FAILED)
 	{
-		printf("Error: sem open failed\n");
+		printf("Error: child monitor sem open failed\n");
 		close_all(&info->sems);
 		return (0);
 	}
@@ -50,6 +50,7 @@ void	*death_monitor(void *arg)
 	sem_post(info->sems.exit);
 	sem_post(info->sems.full);
 	close_all(&info->sems);
+	sem_close(info->sems.exit);
 	return (0);
 }
 
@@ -64,7 +65,6 @@ int	prepare_philo(t_philo *philo, t_args args, int i, int *exit_state)
 	philo->sems.full = sem_open("/full", O_RDONLY);
 	philo->sems.dead = sem_open("/dead", O_RDONLY);
 	philo->sems.write = sem_open("/write", O_RDONLY);
-	sem_unlink("/exit");
 	philo->sems.exit = sem_open("/exit", O_CREAT, 0644, 1);
 	if (philo->sems.forks == SEM_FAILED || philo->sems.full == SEM_FAILED
 		|| philo->sems.dead == SEM_FAILED || philo->sems.write == SEM_FAILED
@@ -92,10 +92,10 @@ int	child_start(t_args args, int i)
 
 	exit_state = 0;
 	if (prepare_philo(&philo, args, i, &exit_state) == -1)
-		close_and_exit(&philo, "sem open failed");
+		close_and_exit(&philo, "child sem open failed");
 	monitor_info.exit_state = &exit_state;
 	if (pthread_create(&monitor, NULL, death_monitor, &monitor_info) == -1)
-		close_and_exit(&philo, "thread create failed");
+		close_and_exit(&philo, "child thread create failed");
 	set_philo_state(args, &philo, THINK);
 	child_loop(args, &philo);
 	pthread_join(monitor, NULL);
