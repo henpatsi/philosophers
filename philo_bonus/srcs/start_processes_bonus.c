@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 10:43:28 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/18 12:23:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/18 13:05:03 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	*full_monitor(void	*arg)
 	return (0);
 }
 
-int	monitor_start(t_args args, pid_t *process_ids)
+int	monitor_start(t_args args, t_sems sems, pid_t *process_ids)
 {
 	int			i;
 	pthread_t	monitor;
@@ -72,6 +72,7 @@ int	monitor_start(t_args args, pid_t *process_ids)
 	while (i < args.philo_count)
 	{
 		waitpid(process_ids[i], NULL, 0);
+		sem_post(sems.full);
 		i++;
 	}
 	pthread_join(monitor, NULL);
@@ -99,7 +100,7 @@ int	start_processes(t_args args, t_sems sems)
 		}
 		i++;
 	}
-	ret = monitor_start(args, process_ids);
+	ret = monitor_start(args, sems, process_ids);
 	if (ret == -1)
 		sem_post(sems.dead);
 	free(process_ids);

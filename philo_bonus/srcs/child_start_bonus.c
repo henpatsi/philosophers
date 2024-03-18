@@ -6,11 +6,20 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/18 12:23:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/18 13:07:49 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
+
+void	close_all_child(t_sems *sems, char *error_message)
+{
+	if (error_message)
+		printf("Error: %s\n", error_message);
+	close_all(sems);
+	if (sems->exit != SEM_FAILED)
+		sem_close(sems->exit);
+}
 
 void	child_loop(t_args args, t_philo *philo)
 {
@@ -39,8 +48,7 @@ void	*death_monitor(void *arg)
 	if (info->sems.dead == SEM_FAILED || info->sems.exit == SEM_FAILED
 		|| info->sems.full == SEM_FAILED)
 	{
-		printf("Error: child monitor sem open failed\n");
-		close_all(&info->sems);
+		close_all_child(&info->sems, "Error: child monitor sem open failed\n");
 		return (0);
 	}
 	sem_wait(info->sems.dead);
@@ -49,8 +57,7 @@ void	*death_monitor(void *arg)
 	*info->exit_state = 1;
 	sem_post(info->sems.exit);
 	sem_post(info->sems.full);
-	close_all(&info->sems);
-	sem_close(info->sems.exit);
+	close_all_child(&info->sems, 0);
 	return (0);
 }
 
@@ -73,16 +80,6 @@ int	prepare_philo(t_philo *philo, t_args args, int i, int *exit_state)
 	return (1);
 }
 
-void	close_and_exit(t_philo *philo, char *error_message)
-{
-	if (error_message)
-		printf("Error: %s\n", error_message);
-	close_all(&philo->sems);
-	if (philo->sems.exit != SEM_FAILED)
-		sem_close(philo->sems.exit);
-	exit(0);
-}
-
 int	child_start(t_args args, int i)
 {
 	pthread_t		monitor;
@@ -92,13 +89,19 @@ int	child_start(t_args args, int i)
 
 	exit_state = 0;
 	if (prepare_philo(&philo, args, i, &exit_state) == -1)
-		close_and_exit(&philo, "child sem open failed");
+	{
+		close_all_child(&philo.sems, "child sem open failed");
+		exit (1);
+	}
 	monitor_info.exit_state = &exit_state;
 	if (pthread_create(&monitor, NULL, death_monitor, &monitor_info) == -1)
-		close_and_exit(&philo, "child thread create failed");
+	{
+		close_all_child(&philo.sems, "child thread create failed");
+		exit (1);
+	}
 	set_philo_state(args, &philo, THINK);
 	child_loop(args, &philo);
 	pthread_join(monitor, NULL);
-	close_and_exit(&philo, 0);
+	close_all_child(&philo.sems, 0);
 	exit (0);
 }
