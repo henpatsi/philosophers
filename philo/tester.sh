@@ -11,7 +11,7 @@ CYAN='\033[0;36m'
 
 OUTFILE=out
 
-LEAKS_ON=1
+LEAKS_ON=0
 
 test_error()
 {

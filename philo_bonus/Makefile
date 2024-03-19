@@ -6,7 +6,7 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 09:47:29 by hpatsi            #+#    #+#              #
-#    Updated: 2024/03/15 10:12:52 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/03/19 08:42:43 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ CFLAGS += -Wall -Wextra -Werror -Wpedantic -Wtype-limits $(INCLUDES)
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJECTS)
+$(NAME): $(OBJECTS)
 	cc $(CFLAGS) $(OBJECTS) -o $(NAME)
 
 $(OBJECTS): $(SOURCES)

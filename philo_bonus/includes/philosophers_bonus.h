@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:04:31 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/15 12:51:46 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/19 08:47:31 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@
 # include <sys/time.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-
-# include <sys/stat.h>
 # include <semaphore.h>
-# include <signal.h>
 # include <pthread.h>
 
 typedef struct timeval	t_timeval;
